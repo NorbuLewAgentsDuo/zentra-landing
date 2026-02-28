@@ -4,7 +4,7 @@
   "description": "Zentra AI Landing Page",
   "main": "index.js",
   "scripts": {
-    "start": "npx serve -l p $PORT"
+    "start": "serve -p $PORT"
   },
   "dependencies": {
     "serve": "^14.2.5"
