@@ -1,0 +1,12 @@
+{
+  "name": "zentra-landing-page",
+  "version": "1.0.0",
+  "description": "Zentra AI Landing Page",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx serve -l p $PORT"
+  },
+  "dependencies": {
+    "serve": "^14.2.5"
+  }
+}

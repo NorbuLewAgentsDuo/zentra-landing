@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "claude_ai_n8n": {
+      "command": "cmd",
+      "args": [
+        "/c npx -y n8n-mcp@latest"
+      ],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://norbulew.app.n8n.cloud",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ZDg5NTc3OS03NDY2LTRjNzgtOTk0Zi01YWQwM2I1MzI2NzciLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzcwMjYxODUzLCJleHAiOjE3NzI4MTI4MDB9.0Ko7reFF0KXEp2ezVbkCuDA5NulGmcNoZ7MczD7xxHM",
+        "ENABLE_ALL_TOOLS": "true"
+      }
+    }
+  }
+}

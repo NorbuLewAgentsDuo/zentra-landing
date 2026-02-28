@@ -1,0 +1,293 @@
+/* Zentra MY - Custom Tailwind Utilities */
+
+/* Base resets and custom properties */
+:root {
+  --color-primary: #22c55e;
+  --color-primary-hover: #16a34a;
+  --color-bg-dark: #0a0a0a;
+  --color-bg-card: #171717;
+  --color-border: #262626;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom focus states for accessibility */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.4);
+}
+
+/* Modal backdrop blur */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* CTA pulse animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+  }
+}
+
+.cta-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Button hover lift effect */
+.btn-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px -10px rgba(34, 197, 94, 0.5);
+}
+
+/* Form input styles */
+.form-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* Select dropdown styling for dark theme */
+select.form-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23737373'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+select.form-input option {
+  background-color: #262626;
+  color: #fff;
+}
+
+/* Step transition */
+.step-transition {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.step-hidden {
+  opacity: 0;
+  transform: translateX(20px);
+  pointer-events: none;
+  position: absolute;
+}
+
+.step-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Modal animation */
+.modal-enter {
+  animation: modalFadeIn 0.3s ease forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Feature card hover */
+.feature-card {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card:hover {
+  background-color: #1f1f1f;
+  border-color: #363636;
+}
+
+/* Text gradient for accent */
+.text-gradient {
+  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Success checkmark animation */
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.checkmark-animate {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkmark 0.5s ease forwards 0.2s;
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  .hero-headline {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .hero-subheadline {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* Hide scrollbar when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* ===================
+   Mobile Modal Optimization
+   =================== */
+
+/* Ensure modal is properly centered on all devices */
+#leadModal.flex {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile-specific modal positioning */
+@media (max-width: 640px) {
+  #leadModal.flex {
+    align-items: flex-start;
+    padding-top: 10vh;
+    padding-bottom: 2rem;
+  }
+
+  #modalContent {
+    max-height: 85vh;
+    overflow-y: auto;
+    margin: 0;
+  }
+
+  /* Ensure form inputs are large enough for touch */
+  .form-input {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    padding: 0.875rem 1rem;
+  }
+
+  /* Ensure buttons are easy to tap */
+  #nextBtn,
+  #backBtn,
+  #submitBtn {
+    min-height: 48px;
+    font-size: 1rem;
+  }
+}
+
+/* Handle virtual keyboard on mobile */
+@media (max-height: 500px) {
+  #leadModal.flex {
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+
+  #modalContent {
+    max-height: 95vh;
+  }
+}
+
+/* iOS Safari safe area support */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #leadModal {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .fixed.bottom-0 {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* ===================
+   Phone Call Interface Styles
+   =================== */
+
+.phone-call-interface {
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5));
+}
+
+/* Waveform animation */
+.audio-waveform .waveform-bar {
+  transition: height 0.15s ease-out;
+}
+
+/* Pulsing effect for incoming call */
+@keyframes incoming-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(34, 197, 94, 0);
+  }
+}
+
+.phone-call-interface .bg-gradient-to-br {
+  animation: incoming-pulse 2s ease-in-out infinite;
+}
+
+/* Mobile optimization for phone interface */
+@media (max-width: 640px) {
+  .phone-call-interface {
+    transform: scale(0.95);
+  }
+
+  /* Ensure tap targets are large enough */
+  #demoPlayBtn {
+    min-width: 64px;
+    min-height: 64px;
+  }
+}
+
+/* Phone interface touch feedback */
+#demoPlayBtn:active {
+  transform: scale(0.95);
+}
+
+/* Smooth progress bar */
+#audioProgress {
+  transition: width 0.1s linear;
+}
+
+/* Call highlight cards hover */
+.phone-call-interface + .grid > div {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.phone-call-interface + .grid > div:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 197, 94, 0.4);
+}
