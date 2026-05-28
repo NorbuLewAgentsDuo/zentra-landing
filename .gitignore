@@ -12,12 +12,22 @@ dist/
 # Environment
 .env*.local
 .env.local
+.env
+.env.*
+!.env.example
 
 # Vercel
 .vercel
 
+# Local agent/tool config
+.codex/
+.claude/settings.local.json
+.mcp.json
+
 # Editor / OS
 .DS_Store
+.idea/
+.vscode/
 nul
 n u l
 
