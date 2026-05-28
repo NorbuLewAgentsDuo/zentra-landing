@@ -2857,9 +2857,11 @@ body::after {
 }
 
 .stats {
-  max-width: 1188px;
+  width: 100%;
+  max-width: none;
   transform: none;
-  margin: 0 auto;
+  margin: 0;
+  padding-inline: clamp(20px, 7vw, 144px);
   border-radius: 0;
   border-left: 0;
   border-right: 0;
@@ -3018,9 +3020,18 @@ body::after {
   border-radius: 7px;
 }
 
-.section-light,
-.features-section {
+.section.section-light,
+.section.features-section {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
   background: var(--clean-paper);
+}
+
+.section-light > *,
+.features-section > * {
+  width: min(100%, 1328px);
+  margin-inline: auto;
 }
 
 .steps {
@@ -3171,6 +3182,7 @@ body::after {
 
   .stats {
     grid-template-columns: 1fr;
+    padding-inline: 0;
   }
 
   .stat {
