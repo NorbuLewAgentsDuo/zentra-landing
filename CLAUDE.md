@@ -4,47 +4,63 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Zentra MY is a static landing page for an AI voice receptionist service targeting Malaysian solar companies. It captures leads via a two-step modal form that triggers an n8n webhook to initiate AI-powered demo calls.
+Zentra MY is a Next.js (App Router) landing page for Zentra — an AI lead conversion system targeting Malaysian B2C service businesses. Deployed on Vercel. Lead submissions are posted to an n8n webhook.
+
+## Tech Stack
+
+- Next.js 15 (App Router, JS)
+- React 19
+- `next/font` for Sora + DM Mono (no external Google Fonts link)
+- Plain CSS in [app/globals.css](app/globals.css) — no Tailwind, no CSS-in-JS
+- Vercel for hosting
 
 ## Development Commands
 
 ```bash
-# Run locally (Python)
-python -m http.server 8000
-
-# Run locally (Node.js)
-npx serve
-
-# Open directly in VS Code Live Server
-# Right-click index.html → "Open with Live Server"
+npm run dev      # next dev on :3000
+npm run build    # production build
+npm run start    # serve production build locally
+npm run lint     # next lint
 ```
-
-No build step required - this is a static HTML/CSS/JS project using Tailwind CSS via CDN.
 
 ## Architecture
 
-### File Structure
-- `index.html` - Single-page landing with all sections (hero, features, FAQ, modal)
-- `src/main.js` - All JavaScript: modal logic, form validation, n8n webhook submission, FAQ accordion, audio player
-- `src/styles.css` - Custom CSS extending Tailwind (animations, modal styles, mobile optimizations)
-- `assets/` - Static assets (audio files for demo)
+### Directory Layout
 
-### Key Integration
-The lead capture form POSTs to an n8n webhook endpoint (configured in `src/main.js:7`):
-```javascript
-const N8N_WEBHOOK_URL = 'https://norbulew.app.n8n.cloud/webhook/...'
-```
+- [app/layout.js](app/layout.js) — root layout, loads Sora + DM Mono via `next/font`, sets metadata
+- [app/page.js](app/page.js) — homepage composition (imports every section component)
+- [app/globals.css](app/globals.css) — all global styles, brand tokens, keyframes, responsive rules
+- [components/](components/) — one section per file (Nav, Hero, Stats, Problem, AudioDemo, HowItWorks, Features, Testimonials, FAQ, CTA, Footer) plus `RevealAnimations` (scroll-trigger controller)
+- [lib/submitLead.js](lib/submitLead.js) — shared n8n webhook submitter + phone validator
+- [public/assets/](public/assets/) — logo, demo recording
+- [legacy/](legacy/) — pre-migration static HTML (kept for reference, not shipped)
 
-Payload: `{ name, phone, timestamp, source: 'zentra-landing-page' }`
+### Server vs. client components
 
-### UI Patterns
-- Modal uses `data-open-modal` attribute on trigger elements
-- Two-step form with animated transitions (`.step-visible`/`.step-hidden`)
-- FAQ accordion with exclusive open behavior
-- Phone-style audio player with waveform animation
+Server components by default. The ones marked `'use client'`:
 
-### Styling
-- Tailwind CSS via CDN with custom config in `<script>` tag
-- CSS custom properties in `:root` for brand colors
-- Mobile-first with iOS Safari safe-area support
-- Green (#22c55e) as primary accent color
+- `Nav` — scroll state + scroll progress bar
+- `Hero` — form submission + mouse-follow glow
+- `Stats` — IntersectionObserver counter animation
+- `AudioDemo` — `<audio>` playback + waveform animation
+- `FAQ` — exclusive-open toggle state
+- `CTA` — form submission
+- `RevealAnimations` — global IntersectionObserver reveal controller
+
+### n8n Integration
+
+`lib/submitLead.js` posts to `NEXT_PUBLIC_N8N_WEBHOOK_URL` (fallback hard-coded to the original webhook). Both forms send `{ ...fields, timestamp, source: 'zentra-landing-page', formLocation }`.
+
+To override the webhook in Vercel: set `NEXT_PUBLIC_N8N_WEBHOOK_URL` in the project env vars.
+
+## Brand (per [zentra_brand_guidelines.pdf](zentra_brand_guidelines.pdf))
+
+- **Colors** — Deep Navy `#040043`, Electric Blue `#0021F3`, Lavender Pearl `#C1BFE3`, Pure White, Soft Lavender `#F5F4FF`
+- **Approved text pairings** — White-on-Navy, White-on-Blue, Pearl-on-Navy, Navy-on-White (never Blue-on-Navy for text)
+- **Typography** — Sora 700 Display, Sora 600 H2/H3, Sora 400 body (1.7 leading), DM Mono 500 for stats/data
+- **Brand gradient** — `#0021F3 → #C1BFE3` — reserved for logo icon fill, hero `<em>`, waveform, scroll progress, avatars
+- **Voice** — direct, confident, specific numbers not superlatives, Ringgit not dollars
+
+## Deployment
+
+Vercel auto-detects Next.js. Push to the connected git branch, done. No `vercel.json` required.
