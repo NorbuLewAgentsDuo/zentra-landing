@@ -16,9 +16,9 @@ const dmMono = DM_Mono({
 });
 
 export const metadata = {
-  title: 'Zentra — Done-for-you AI Lead Conversion System',
+  title: 'Zentra MY: Intelligent Systems for Business Owners',
   description:
-    'Zentra contacts new leads in under 60 seconds, qualifies them, and books appointments — automatically. Built for B2C service businesses.',
+    'Zentra MY gives any business the power to run intelligent systems that think, adapt, and grow on their own without the complexity.',
   icons: { icon: '/assets/zentralogo.png' },
 };
 

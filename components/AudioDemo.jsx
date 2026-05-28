@@ -81,13 +81,13 @@ export default function AudioDemo() {
       <div className="demo-layout">
         <div className="demo-left">
           <span className="eyebrow">Hear It Live</span>
-          <h2 className="section-h2">Hear Zentra qualify a real clinic inquiry.</h2>
+          <h2 className="section-h2">Hear Zentra handle a real customer inquiry.</h2>
           <p className="body-text">
-            A potential patient has shown interest in a treatment. Hear how Zentra qualifies them, handles pricing questions, and books the appointment — naturally, in under 90 seconds.
+            A customer asks for pricing and availability. Zentra answers, qualifies intent, captures the details, and creates the next action for your team.
           </p>
           <div className="demo-callbox">
             <span className="demo-live-dot" />
-            Live recording · Aesthetic Clinic
+            Live recording: customer inquiry
           </div>
           <div className="demo-captions">
             <div className="demo-cap-item">
@@ -96,7 +96,7 @@ export default function AudioDemo() {
             </div>
             <div className="demo-cap-item">
               <span className="demo-cap-num">100%</span>
-              <span className="demo-cap-label">AI voice</span>
+              <span className="demo-cap-label">AI handled</span>
             </div>
             <div className="demo-cap-item">
               <span className="demo-cap-num">EN / BM</span>
@@ -110,7 +110,7 @@ export default function AudioDemo() {
             <div className="phone-avatar">Z</div>
             <div className="phone-caller-info">
               <div className="phone-caller-name">Zentra AI</div>
-              <div className="phone-caller-role">Qualifying clinic inquiry…</div>
+              <div className="phone-caller-role">Handling customer inquiry...</div>
             </div>
             <div className="phone-status">{playing ? 'On call' : 'Ready'}</div>
           </div>

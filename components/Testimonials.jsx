@@ -1,21 +1,21 @@
 const TESTIS = [
   {
-    initials: 'SA',
-    name: 'Dr. Sarah Azmi',
-    role: 'Luminelle Aesthetic Clinic, Kuala Lumpur',
-    quote: "We used to reply to DMs whenever we had a spare moment — sometimes 3 hours later. Zentra changed that overnight. We&apos;re now booking 8–10 new consultations a week from Instagram alone.",
+    initials: 'RS',
+    name: 'Rizal Shah',
+    role: 'Home services owner, Selangor',
+    quote: 'We were losing leads because nobody replied after working hours. Zentra now answers, qualifies, and sends the right jobs to my team before morning.',
   },
   {
-    initials: 'AR',
-    name: 'Dr. Amirah Rahman',
-    role: 'Glow Medispa, Petaling Jaya',
-    quote: 'Our Meta Ads were running but barely converting. Zentra added the AI follow-up and our cost-per-consultation dropped 35% in the first month. First patient was booked on day 3.',
+    initials: 'AL',
+    name: 'Amanda Lee',
+    role: 'Training business, Kuala Lumpur',
+    quote: 'Our admin work used to sit across WhatsApp, forms, sheets, and email. Zentra connected the flow so every inquiry gets followed up properly.',
   },
   {
-    initials: 'PN',
-    name: 'Priya Nair',
-    role: 'Beauté Clinic, Penang',
-    quote: 'Patients DM at 10pm asking about treatments. Zentra replies instantly and gets them in the calendar before I wake up. I had 4 new bookings waiting on Monday morning.',
+    initials: 'FK',
+    name: 'Farid Kamal',
+    role: 'Property services, Johor Bahru',
+    quote: 'The biggest win was not just faster replies. It was knowing what needed attention each day without digging through messages myself.',
   },
 ];
 
@@ -23,7 +23,7 @@ export default function Testimonials() {
   return (
     <section className="section" id="testimonials">
       <span className="eyebrow">Results</span>
-      <h2 className="section-h2">Real clinics. Real bookings.</h2>
+      <h2 className="section-h2">Built around real businesses, not generic AI demos.</h2>
       <div className="testi-grid">
         {TESTIS.map((t) => (
           <div className="testi-card" key={t.name}>

@@ -10,7 +10,7 @@ export default function Footer() {
         <li><a href="#">Terms of Use</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
-      <div className="footer-copy">© 2025 Zentra AI Sdn Bhd · zentra.ai</div>
+      <div className="footer-copy">Copyright 2026 Zentra AI Sdn Bhd. zentra.ai</div>
     </footer>
   );
 }

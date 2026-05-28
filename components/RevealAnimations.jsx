@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 /**
  * Global reveal-on-scroll controller. Adds `.reveal` to a curated set of
- * elements (skipping the hero — which has its own entrance animations),
+ * elements (skipping the hero, which has its own entrance animations),
  * then toggles `.in` via IntersectionObserver.
  */
 export default function RevealAnimations() {

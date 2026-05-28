@@ -1,43 +1,43 @@
-const TRUST = ['Meta Ads', 'WhatsApp', 'Instagram DMs', 'Google Calendar', 'BM + English'];
+const TRUST = ['WhatsApp', 'Instagram DMs', 'Website Forms', 'CRM', 'Calendar', 'BM + English'];
 
 const JOURNEY = [
   {
     time: '00:00',
-    label: 'Lead arrives',
-    text: 'Hi, how much for pico laser? Any slot this week?',
-    tone: 'Patient DM',
+    label: 'Request arrives',
+    text: 'Hi, can you send pricing and availability for this week?',
+    tone: 'Customer inquiry',
   },
   {
-    time: '00:42',
-    label: 'Zentra qualifies',
-    text: 'Sure. Is this for pigmentation, acne marks, or brightening? I can check a suitable slot for you.',
-    tone: 'AI reply',
+    time: '00:38',
+    label: 'Zentra responds',
+    text: 'Sure. I can help. Is this for a new booking, a repeat order, or a service request?',
+    tone: 'AI system',
   },
   {
-    time: '01:18',
-    label: 'Calendar booked',
-    text: 'Consultation confirmed for Thursday, 6:30 PM. Your team gets the booking details instantly.',
-    tone: 'Booked patient',
+    time: '01:24',
+    label: 'Work routed',
+    text: 'Qualified request sent to the right team with customer details, next step, and follow-up time.',
+    tone: 'Owner view',
   },
 ];
 
 const COMPARE = [
   {
     title: 'Without Zentra',
-    rows: ['DM waits 2-3 hours', 'Staff asks repeated questions', 'Lead compares 4 clinics', 'No-show risk stays high'],
+    rows: ['Messages wait for staff', 'Follow-ups depend on memory', 'Data sits across many tools', 'Owner becomes the system'],
   },
   {
     title: 'With Zentra',
-    rows: ['Reply in under 60 seconds', 'Budget and treatment qualified', 'Slot booked while interest is hot', 'Clinic sees confirmed appointment'],
+    rows: ['AI replies and qualifies fast', 'Next steps happen automatically', 'Systems improve from real activity', 'Owner sees what needs attention'],
     featured: true,
   },
 ];
 
 const METRICS = [
-  { label: 'New inquiries', value: '147' },
-  { label: 'Booked consults', value: '31' },
-  { label: 'Avg. response', value: '38s' },
-  { label: 'Projected value', value: 'RM24k' },
+  { label: 'New inquiries', value: '186' },
+  { label: 'Auto-routed tasks', value: '74' },
+  { label: 'Avg. response', value: '41s' },
+  { label: 'Hours returned', value: '32' },
 ];
 
 export default function SalesProof() {
@@ -52,21 +52,21 @@ export default function SalesProof() {
       <div className="sales-proof-layout">
         <div className="sales-copy">
           <span className="eyebrow">See The System</span>
-          <h2 className="section-h2">From first DM to booked patient, without waiting on your front desk.</h2>
+          <h2 className="section-h2">From customer message to next action, without chasing your team.</h2>
           <p className="body-text">
-            The website needs to sell the result, not just the software. So this section shows the exact journey a clinic owner cares about: inquiry in, qualification done, appointment booked.
+            Zentra connects the moving parts of your business: inquiries, follow-ups, booking, handoffs, reporting, and daily decisions. The system learns the workflow, then keeps it moving.
           </p>
           <div className="pricing-anchor">
             <span>Best fit</span>
-            <strong>Clinics spending RM2,000+ monthly on Meta Ads</strong>
-            <p>Built for teams that already get inquiries and want more of them converted into appointments.</p>
+            <strong>Businesses with repeat inquiries, admin work, or follow-up gaps</strong>
+            <p>Built for owners who want AI inside the business, not another dashboard to babysit.</p>
           </div>
         </div>
 
-        <div className="journey-panel" aria-label="Lead journey simulator">
+        <div className="journey-panel" aria-label="Business workflow simulator">
           <div className="journey-topbar">
             <span className="journey-live" />
-            <span>Lead Journey Simulator</span>
+            <span>Workflow Simulator</span>
             <strong>Under 2 min</strong>
           </div>
           <div className="journey-thread">
@@ -82,8 +82,8 @@ export default function SalesProof() {
             ))}
           </div>
           <div className="booking-alert">
-            <span>New patient booked</span>
-            <strong>Aesthetic consult - Thu 6:30 PM</strong>
+            <span>Next action created</span>
+            <strong>Qualified lead routed to sales, follow-up set for 4:00 PM</strong>
           </div>
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function SalesProof() {
         <div className="dashboard-mock">
           <div className="dashboard-head">
             <div>
-              <span>Clinic dashboard</span>
+              <span>Business command board</span>
               <strong>This month</strong>
             </div>
             <div className="dashboard-status">Live</div>
@@ -119,10 +119,10 @@ export default function SalesProof() {
             ))}
           </div>
           <div className="dashboard-bars" aria-hidden="true">
-            <span style={{ '--bar': '72%' }} />
-            <span style={{ '--bar': '48%' }} />
-            <span style={{ '--bar': '86%' }} />
-            <span style={{ '--bar': '64%' }} />
+            <span style={{ '--bar': '74%' }} />
+            <span style={{ '--bar': '56%' }} />
+            <span style={{ '--bar': '88%' }} />
+            <span style={{ '--bar': '62%' }} />
           </div>
         </div>
       </div>

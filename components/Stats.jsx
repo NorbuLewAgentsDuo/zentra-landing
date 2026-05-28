@@ -3,10 +3,10 @@
 import { useEffect, useRef } from 'react';
 
 const STATS = [
-  { to: 40, suffix: '%', desc: 'of clinic DM inquiries lost to slow or no response' },
-  { to: 10, prefix: '<', suffix: 'min', desc: 'before a potential patient books with a competitor instead' },
-  { to: 500, prefix: 'RM', suffix: '+', desc: 'average treatment value lost with every unanswered message' },
-  { to: 7, suffix: ' days', desc: 'guaranteed: first new patient booked or your first month is free' },
+  { to: 24, suffix: '/7', desc: 'AI systems keep responding, routing, and following up after hours' },
+  { to: 5, suffix: ' days', desc: 'typical timeline to launch your first working business system' },
+  { to: 60, prefix: '<', suffix: ' sec', desc: 'target response time for new leads and customer inquiries' },
+  { to: 0, suffix: ' tech hires', desc: 'needed to start using AI across daily business workflows' },
 ];
 
 export default function Stats() {

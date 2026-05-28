@@ -16,7 +16,7 @@
 
 ## Design Direction
 
-Clinical command board: dark, precise, high contrast, operational. The page should feel like a premium system already running behind the clinic, not a decorative tech poster.
+Business command board: dark, precise, high contrast, operational. The page should feel like a premium system already running behind the business, not a decorative tech poster.
 
 ## Component Guidance
 

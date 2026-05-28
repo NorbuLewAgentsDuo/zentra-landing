@@ -1,18 +1,18 @@
 const STEPS = [
   {
-    n: '01 — Attract',
-    title: 'Ads go live for your clinic',
-    desc: 'Zentra runs targeted Meta Ads reaching people in your area actively searching for aesthetic treatments — botox, fillers, lasers, and more. Every click becomes an inquiry.',
+    n: '01 Map',
+    title: 'We map the work your business repeats',
+    desc: 'Leads, customer questions, follow-ups, bookings, quotes, reporting, handoffs, and reminders. We identify the workflows where AI can create immediate leverage.',
   },
   {
-    n: '02 — Respond',
-    title: 'AI replies in under 60 seconds',
-    desc: 'Every Instagram DM and WhatsApp message gets an instant, natural reply. Zentra qualifies budget, treatment interest, and availability — before your staff even sees the message.',
+    n: '02 Build',
+    title: 'Zentra builds the intelligent system',
+    desc: 'We connect your channels, write the logic, configure the AI, and test the flow around your real business rules. You do not manage prompts or integrations.',
   },
   {
-    n: '03 — Book',
-    title: 'Appointment lands in your calendar',
-    desc: 'Qualified patients pick a slot and get confirmed automatically. You get a notification. Your team just shows up and treats — no chasing, no admin.',
+    n: '03 Run',
+    title: 'The system operates and improves',
+    desc: 'Zentra responds, routes, books, follows up, and reports. As your business changes, the system adapts with it.',
   },
 ];
 
@@ -22,10 +22,10 @@ export default function HowItWorks() {
       <div className="how-header">
         <div>
           <span className="eyebrow">How It Works</span>
-          <h2 className="section-h2">Three steps.<br />Zero manual work.</h2>
+          <h2 className="section-h2">Map the work.<br />Build the system. Let it run.</h2>
         </div>
         <p className="body-text">
-          Zentra runs your ads, handles every inquiry, and fills your calendar — without your team lifting a finger.
+          Zentra turns repeated business work into intelligent systems your team can rely on every day.
         </p>
       </div>
       <div className="steps">

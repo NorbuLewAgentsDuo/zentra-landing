@@ -6,11 +6,11 @@ brand
 
 ## Product Purpose
 
-Zentra is an AI lead conversion system for Malaysian B2C service businesses, focused first on aesthetic clinics. It runs Meta Ads, replies to Instagram and WhatsApp inquiries quickly, qualifies patients, and books appointments into the clinic calendar.
+Zentra MY gives any business the power to run intelligent systems that think, adapt, and grow on their own without the complexity. It helps business owners automate lead response, customer follow-up, booking, internal workflows, and daily operations with AI systems built around how their business already works.
 
 ## Users
 
-Clinic owners, operators, and front desk managers who already receive inquiries but lose bookings because staff reply late or inconsistently. They care about booked patients, speed, trust, language fit, and clear commercial upside.
+General business owners, operators, and small teams in Malaysia who want modern AI systems but do not want to manage tools, prompts, integrations, or technical setup. They care about time saved, faster response, fewer missed opportunities, simpler operations, and clear commercial upside.
 
 ## Brand Voice
 
@@ -18,10 +18,10 @@ Direct, confident, specific. Use Ringgit, concrete response times, and practical
 
 ## Strategic Principles
 
-- Show the workflow, not just the promise.
-- Sell booked appointments, not automation.
-- Make speed-to-lead feel urgent without panic.
-- Keep the interface premium, clinical, and operational.
+- Show the operating system, not just the AI promise.
+- Sell business outcomes, not tools.
+- Make complexity feel handled without making the owner feel behind.
+- Keep the interface premium, precise, and operational.
 - Use brand pairings: white or pearl on navy, white on blue, navy on white.
 
 ## Anti-References

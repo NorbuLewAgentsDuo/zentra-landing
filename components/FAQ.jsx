@@ -4,28 +4,28 @@ import { useState } from 'react';
 
 const FAQS = [
   {
-    q: 'What exactly does Zentra do for my clinic?',
-    a: "Zentra runs your Meta Ads, then responds to every Instagram DM and WhatsApp inquiry within 60 seconds — qualifying the patient and booking them directly into your calendar. You get new patients without adding staff or managing ads yourself.",
+    q: 'What exactly does Zentra MY do?',
+    a: 'Zentra MY designs and runs AI systems for your business. That can include lead response, follow-up, booking, workflow automation, reporting, customer routing, and internal task handoffs.',
   },
   {
-    q: "What if a patient asks a clinical question the AI can’t answer?",
-    a: "Zentra handles inquiry management, qualification, and booking. For clinical questions — treatment specifics, medical history, contraindications — it flags those for your team to follow up. It knows what it can and can’t handle.",
+    q: 'Is this only for clinics?',
+    a: 'No. Zentra can work for service businesses, property teams, education providers, wellness brands, home services, ecommerce, agencies, and other businesses with repeated customer or admin workflows.',
   },
   {
-    q: 'Do you manage the Meta Ads or do we?',
-    a: "We handle everything — ad creative, audience targeting, budget management, and monthly optimisation. You review and approve before anything goes live. Your account, fully managed.",
+    q: 'Do I need to understand AI or prompts?',
+    a: 'No. We handle the strategy, setup, prompts, integrations, testing, and improvement. You explain how the business works, then we build the system around it.',
   },
   {
-    q: 'How quickly can my clinic go live?',
-    a: "Most clinics are live within 3–5 working days. Our team configures the AI scripts, sets up the ad account, and integrates with your booking system. No technical work required from your side.",
+    q: 'How quickly can we launch something useful?',
+    a: 'Most businesses can launch a first focused system within 3 to 5 working days after we map the workflow and confirm access to the tools involved.',
   },
   {
-    q: 'Is there a contract or lock-in?',
-    a: "No contract. Monthly subscription, cancel anytime with 30 days’ notice. We keep clients by getting results — not by locking them in.",
+    q: 'What tools can Zentra connect with?',
+    a: 'Common channels include WhatsApp, Instagram, website forms, Google Sheets, calendars, CRM tools, email, and internal notifications. We confirm the exact setup during the demo.',
   },
   {
-    q: "What’s the guarantee exactly?",
-    a: "If we don’t book a new patient into your calendar within 7 days of going live, month 1 is completely free. No questions, no fine print.",
+    q: 'Will AI replace my team?',
+    a: 'No. Zentra removes repetitive work and gives your team better next actions. Humans still handle judgement, relationships, approvals, and exceptions.',
   },
 ];
 
@@ -36,11 +36,11 @@ export default function FAQ() {
       <div className="faq-layout">
         <div className="faq-left">
           <span className="eyebrow">FAQ</span>
-          <h2 className="section-h2">Questions clinic owners ask us every week.</h2>
+          <h2 className="section-h2">Questions business owners ask before using AI systems.</h2>
           <p className="body-text">
-            No jargon. If something isn&apos;t covered here, our team responds within the hour.
+            No jargon. We start with one workflow, prove the value, then expand only where it makes sense.
           </p>
-          <a href="#cta" className="btn btn-blue faq-cta">Talk to us →</a>
+          <a href="#cta" className="btn btn-blue faq-cta">Talk to us</a>
         </div>
         <div className="faq-items">
           {FAQS.map((f, i) => (

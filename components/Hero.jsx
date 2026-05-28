@@ -44,11 +44,11 @@ export default function Hero() {
     if (!isValidPhone(phone)) return setState((s) => ({ ...s, error: 'Please enter a valid phone number.' }));
     if (!businessType) return setState((s) => ({ ...s, error: 'Please select your business type.' }));
 
-    setState({ loading: true, label: 'Sending…', success: false, error: '' });
+    setState({ loading: true, label: 'Sending...', success: false, error: '' });
     try {
       await submitLead({ name, phone, businessType, formLocation: 'hero' });
       form.reset();
-      setState({ loading: false, label: '✓ Request received', success: true, error: '' });
+      setState({ loading: false, label: 'Request received', success: true, error: '' });
       setTimeout(() => setState({ loading: false, label: DEFAULT_LABEL, success: false, error: '' }), 4000);
     } catch (err) {
       console.error(err);
@@ -70,28 +70,28 @@ export default function Hero() {
 
       <div className="hero-inner">
         <div className="hero-tag">
-          <span className="hero-tag-dot" /> For Aesthetic Clinics in Malaysia
+          <span className="hero-tag-dot" /> AI systems for Malaysian business owners
         </div>
         <h1 className="hero-h1">
-          First new patient booked
+          Run intelligent systems
           <br />
-          in <em>7 days</em>, or you don&apos;t pay.
+          that <em>grow on their own</em>.
         </h1>
         <p className="hero-sub">
-          Zentra runs your Meta Ads, responds to every Instagram and WhatsApp inquiry in under 60 seconds, and books appointments directly into your calendar, 24/7, without adding a single staff member.
+          Zentra MY gives any business the power to run intelligent systems that think, adapt, and grow on their own without the complexity.
         </p>
         <div className="hero-proof">
           <div className="hero-proof-item">
-            <span className="hero-proof-label">Response target</span>
-            <span className="hero-proof-num">&lt;60s on every inquiry</span>
+            <span className="hero-proof-label">Built for</span>
+            <span className="hero-proof-num">Leads, follow-up, bookings, and operations</span>
           </div>
           <div className="hero-proof-item">
-            <span className="hero-proof-label">Commercial promise</span>
-            <span className="hero-proof-num">First booking guaranteed</span>
+            <span className="hero-proof-label">Owner effort</span>
+            <span className="hero-proof-num">No prompts, tools, or technical setup to manage</span>
           </div>
           <div className="hero-proof-item">
-            <span className="hero-proof-label">Coverage</span>
-            <span className="hero-proof-num">Instagram and WhatsApp</span>
+            <span className="hero-proof-label">Channels</span>
+            <span className="hero-proof-num">WhatsApp, Instagram, forms, CRM, and calendars</span>
           </div>
         </div>
       </div>
@@ -99,21 +99,21 @@ export default function Hero() {
       <div className="hero-form-card">
         <div className="form-card-kicker">
           <span className="form-card-dot" />
-          Live clinic growth audit
+          Business systems audit
         </div>
         <div className="form-card-head">
           <div>
-            <div className="hero-form-title">See Zentra in Action</div>
-            <div className="hero-form-sub">Get a free demo personalised to your clinic. No commitment.</div>
+            <div className="hero-form-title">See what Zentra can automate</div>
+            <div className="hero-form-sub">Get a free demo mapped to your business. No commitment.</div>
           </div>
           <div className="form-card-badge">20 min</div>
         </div>
         <div className="form-pipeline" aria-hidden="true">
-          <span className="pipeline-step active">Lead</span>
+          <span className="pipeline-step active">Map</span>
           <span className="pipeline-line" />
-          <span className="pipeline-step active">Qualify</span>
+          <span className="pipeline-step active">Build</span>
           <span className="pipeline-line" />
-          <span className="pipeline-step">Book</span>
+          <span className="pipeline-step">Run</span>
         </div>
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
@@ -128,12 +128,13 @@ export default function Hero() {
             <label htmlFor="heroBusiness">Business Type</label>
             <select id="heroBusiness" name="businessType" defaultValue="" required>
               <option value="" disabled>Select your industry</option>
-              <option>Aesthetic Clinic / Skincare</option>
-              <option>Dental / Medical Clinic</option>
-              <option>Hair Salon / Barbershop</option>
+              <option>Service Business</option>
+              <option>Clinic / Wellness</option>
               <option>Real Estate / Property</option>
-              <option>Education / Tuition</option>
-              <option>Fitness / Gym</option>
+              <option>Education / Training</option>
+              <option>Retail / Ecommerce</option>
+              <option>Professional Services</option>
+              <option>Home Services</option>
               <option>Other</option>
             </select>
           </div>
@@ -148,15 +149,15 @@ export default function Hero() {
         </form>
         <div className="hero-outcome-grid" aria-hidden="true">
           <div>
-            <span>Avg. reply</span>
-            <strong>&lt;60s</strong>
-          </div>
-          <div>
-            <span>Setup</span>
+            <span>First system</span>
             <strong>3-5 days</strong>
           </div>
+          <div>
+            <span>Owner setup</span>
+            <strong>Done for you</strong>
+          </div>
         </div>
-        <p className="form-note">No setup fees · No contracts · Cancel anytime</p>
+        <p className="form-note">No setup complexity. No technical team needed.</p>
       </div>
     </section>
   );

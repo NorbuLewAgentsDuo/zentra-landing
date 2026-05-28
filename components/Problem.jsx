@@ -1,18 +1,18 @@
 const PAINS = [
   {
     n: '01',
-    title: "Staff can't reply to DMs while treating patients",
-    desc: "Your front desk manages walk-ins, payments, and calls. Instagram and WhatsApp inquiries sit for hours — by which time the patient has already found someone else.",
+    title: 'Your business runs on people remembering what to do',
+    desc: 'Leads, follow-ups, quotes, bookings, reminders, and reports depend on whoever is free at the moment. Work moves, but the system is fragile.',
   },
   {
     n: '02',
-    title: 'A lead that waits 10 minutes books the next clinic',
-    desc: 'Aesthetic patients message multiple clinics at once. First to respond wins. Every minute of delay is a booking lost to whoever replied faster.',
+    title: 'Customers expect fast answers everywhere',
+    desc: 'They message on WhatsApp, Instagram, forms, and chat. If your team is busy, the opportunity slows down before anyone notices.',
   },
   {
     n: '03',
-    title: "You're losing RM500+ per missed DM, invisibly",
-    desc: "Most clinic owners track conversions — not missed opportunities. The RM500 filler or RM800 laser that booked elsewhere never shows up in your analytics.",
+    title: 'AI feels useful, but too complicated to install',
+    desc: 'Most owners do not want another tool to configure. They want a business system that works, improves, and tells the team what to do next.',
   },
 ];
 
@@ -30,9 +30,9 @@ export default function Problem() {
       <div className="problem-layout">
         <div className="problem-left">
           <span className="eyebrow">The Problem</span>
-          <h2 className="section-h2">Most clinic owners don&apos;t know how many patients they&apos;re losing.</h2>
+          <h2 className="section-h2">Most businesses do not need more software. They need a smarter operating system.</h2>
           <p className="body-text problem-body">
-            Your staff are treating patients. Meanwhile, DMs stack up in your Instagram inbox. By the time someone replies, those leads have already booked the clinic down the road.
+            Every growing business has hidden manual work. Zentra finds the repeated decisions, messages, and handoffs, then turns them into AI systems that keep improving.
           </p>
           <ul className="pain-list">
             {PAINS.map((p) => (
@@ -48,7 +48,7 @@ export default function Problem() {
         </div>
 
         <div className="decay-wrap">
-          <div className="decay-heading">DM response rate vs. booking likelihood</div>
+          <div className="decay-heading">Response speed vs. customer momentum</div>
           {DECAY.map((d) => (
             <div className="decay-row" key={d.time}>
               <div className="decay-time">{d.time}</div>
@@ -64,8 +64,8 @@ export default function Problem() {
           </div>
           <div className="decay-bar-accent" />
           <div className="decay-source">
-            <div className="decay-source-label">Source</div>
-            <div className="decay-source-text">MIT / LeadResponseManagement.org — Speed-to-lead study</div>
+            <div className="decay-source-label">System focus</div>
+            <div className="decay-source-text">Capture demand while interest is active, then route the next action automatically.</div>
           </div>
         </div>
       </div>
