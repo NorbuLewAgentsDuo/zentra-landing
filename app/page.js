@@ -2,6 +2,7 @@ import markup from '@/components/landingMarkup';
 import DesignInteractions from '@/components/DesignInteractions';
 import SiteChrome from '@/components/SiteChrome';
 import StructuredData from '@/components/StructuredData';
+import Infographics from '@/components/Infographics';
 import { whatsappBase, bookingUrl } from '@/lib/config';
 
 // The page body is the exact static markup from Norbu's design export
@@ -31,6 +32,12 @@ function enhance(html) {
       'data-z-input="replyRate" aria-label="Percent of leads you reply to within minutes"'
     )
     .replace('data-z-out="lostMonthLabel"', 'data-z-out="lostMonthLabel" aria-live="polite"');
+  // balanced mount-point for the animated Speed-to-Lead chart, between the
+  // Problem and How-it-works sections (Infographics portals into it).
+  out = out.replace(
+    '<!-- ===================== HOW IT WORKS ===================== -->',
+    '<div id="z-speed-mount"></div>\n<!-- ===================== HOW IT WORKS ===================== -->'
+  );
   return out;
 }
 
@@ -40,6 +47,7 @@ export default function Page() {
     <>
       <StructuredData />
       <div dangerouslySetInnerHTML={{ __html: html }} />
+      <Infographics />
       <DesignInteractions />
       <SiteChrome />
     </>
