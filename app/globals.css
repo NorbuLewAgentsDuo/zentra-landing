@@ -187,3 +187,45 @@
       transition-duration:0.001ms !important;
     }
   }
+
+  /* --- keyboard focus visibility (a11y) --- */
+  a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline:2px solid #6f86ff; outline-offset:3px; border-radius:8px;
+  }
+  .z-range:focus-visible { outline-offset:6px; }
+
+  /* --- top scroll-progress bar --- */
+  .z-progress {
+    position:fixed; top:0; left:0; height:3px; width:0;
+    background:linear-gradient(90deg,#0021F3,#C1BFE3);
+    box-shadow:0 0 10px rgba(0,33,243,0.6);
+    z-index:200; transition:width .08s linear; pointer-events:none;
+  }
+
+  /* --- sticky mobile CTA bar (<=880px only) --- */
+  .z-mobile-cta { display:none; }
+  @media (max-width:880px){
+    .z-mobile-cta {
+      position:fixed; left:0; right:0; bottom:0; z-index:150;
+      display:flex; gap:10px; align-items:stretch;
+      padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));
+      background:rgba(5,4,6,0.86); backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-top:1px solid rgba(193,191,227,0.14);
+      transition:transform .3s cubic-bezier(.22,.68,0,1);
+    }
+    .z-mobile-cta.is-hidden { transform:translateY(130%); }
+    .z-mobile-cta a {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:14px 12px; border-radius:12px; font-size:15px; font-weight:600;
+      text-decoration:none; line-height:1;
+    }
+    .z-mcta-book {
+      flex:1; background:#0021F3; color:#fff;
+      box-shadow:0 10px 28px -10px rgba(0,33,243,0.9);
+    }
+    .z-mcta-wa {
+      flex:0 0 auto; background:rgba(255,255,255,0.05); color:#fff;
+      border:1px solid rgba(193,191,227,0.22); padding:14px 18px;
+    }
+  }
