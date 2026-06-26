@@ -32,12 +32,18 @@ function enhance(html) {
       'data-z-input="replyRate" aria-label="Percent of leads you reply to within minutes"'
     )
     .replace('data-z-out="lostMonthLabel"', 'data-z-out="lostMonthLabel" aria-live="polite"');
-  // balanced mount-point for the animated Speed-to-Lead chart, between the
-  // Problem and How-it-works sections (Infographics portals into it).
-  out = out.replace(
-    '<!-- ===================== HOW IT WORKS ===================== -->',
-    '<div id="z-speed-mount"></div>\n<!-- ===================== HOW IT WORKS ===================== -->'
-  );
+  // balanced mount-points for the animated infographics. Each is a complete
+  // <div> inserted between two design sections; Infographics portals into them.
+  const mounts = [
+    ['<!-- ===================== BUILT FOR (audience) ===================== -->', 'z-kpi-mount'],
+    ['<!-- ===================== HOW IT WORKS ===================== -->', 'z-speed-mount'],
+    ['<!-- ===================== THE SYSTEM ===================== -->', 'z-beforeafter-mount'],
+    ['<!-- ===================== VS DIY (comparison) ===================== -->', 'z-flywheel-mount'],
+    ['<!-- ===================== FAQ ===================== -->', 'z-leak-mount'],
+  ];
+  for (const [marker, id] of mounts) {
+    out = out.replace(marker, `<div id="${id}"></div>\n${marker}`);
+  }
   return out;
 }
 

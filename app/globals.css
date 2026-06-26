@@ -229,3 +229,7 @@
       border:1px solid rgba(193,191,227,0.22); padding:14px 18px;
     }
   }
+
+  /* --- flywheel rotation (disabled under reduced-motion via the block above) --- */
+  @keyframes zspin { to { transform: rotate(360deg); } }
+  .z-flywheel-ring { animation: zspin 26s linear infinite; }
