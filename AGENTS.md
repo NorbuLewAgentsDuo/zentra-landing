@@ -27,31 +27,24 @@ npm run lint     # next lint
 
 ### Directory Layout
 
-- [app/layout.js](app/layout.js) — root layout, loads Sora + DM Mono via `next/font`, sets metadata
-- [app/page.js](app/page.js) — homepage composition (imports every section component)
-- [app/globals.css](app/globals.css) — all global styles, brand tokens, keyframes, responsive rules
-- [components/](components/) — one section per file (Nav, Hero, Stats, Problem, AudioDemo, HowItWorks, Features, Testimonials, FAQ, CTA, Footer) plus `RevealAnimations` (scroll-trigger controller)
-- [lib/submitLead.js](lib/submitLead.js) — shared n8n webhook submitter + phone validator
-- [public/assets/](public/assets/) — logo, demo recording
-- [legacy/](legacy/) — pre-migration static HTML (kept for reference, not shipped)
+The current homepage is a faithful port of Norbu's design export (`Zentra MY.html`). The static markup is rendered verbatim; only the interactivity is React.
 
-### Server vs. client components
+- [app/layout.js](app/layout.js) — root layout + metadata. Fonts (Sora + DM Mono) are self-hosted via `@font-face` in globals.css — **no `next/font`**.
+- [app/page.js](app/page.js) — renders the design markup via `dangerouslySetInnerHTML` and mounts `DesignInteractions`.
+- [app/globals.css](app/globals.css) — the design's CSS verbatim (self-hosted `@font-face`, brand tokens, keyframes, responsive rules). Generated from the export; edit the design or re-run the unpack, don't hand-tune.
+- [components/landingMarkup.js](components/landingMarkup.js) — **generated** static HTML string (the whole page body). Template bindings (`{{ }}`) were resolved to `data-z-*` hooks. Don't hand-edit; regenerate from the design export.
+- [components/DesignInteractions.jsx](components/DesignInteractions.jsx) — the single `'use client'` island. Ports the export's `DCLogic` 1:1: scroll reveal (`.reveal`), count-up stats (`.z-count`), mobile menu (`[data-z-toggle]/[data-z-close]` → `[data-z-menu].open`), exclusive-open FAQ (`[data-z-faq-btn]` → `[data-faq].open`), and the lead-loss calculator (3 `[data-z-input]` sliders → `[data-z-out]` labels).
+- [public/assets/design/](public/assets/design/) — the export's self-hosted fonts (6× woff2) + image, referenced by globals.css and the markup.
+- [lib/submitLead.js](lib/submitLead.js) — n8n webhook submitter. **Currently unused** — the new design has no lead form (CTAs are anchors to `#book` / WhatsApp). Kept for when a form is reintroduced.
+- [legacy/](legacy/) — superseded versions, not shipped. `legacy/react-app/` holds the previous React-component site (Nav/Hero/Stats/… + globals.css); `legacy/index.html` etc. are the pre-migration static HTML.
 
-Server components by default. The ones marked `'use client'`:
+### Updating the design
 
-- `Nav` — scroll state + scroll progress bar
-- `Hero` — form submission + mouse-follow glow
-- `Stats` — IntersectionObserver counter animation
-- `AudioDemo` — `<audio>` playback + waveform animation
-- `FAQ` — exclusive-open toggle state
-- `CTA` — form submission
-- `RevealAnimations` — global IntersectionObserver reveal controller
+The page is a port of a design-tool export, not hand-authored React. To change content/layout, edit the design and re-export, then re-unpack: decode the bundle's manifest+template, resolve the `{{ }}` bindings to `data-z-*` hooks, and regenerate `components/landingMarkup.js` + `app/globals.css` + `public/assets/design/`. If you add interactivity, wire it in `DesignInteractions.jsx` by `data-*` selector (don't put logic in the markup).
 
 ### n8n Integration
 
-`lib/submitLead.js` posts to `NEXT_PUBLIC_N8N_WEBHOOK_URL` (fallback hard-coded to the original webhook). Both forms send `{ ...fields, timestamp, source: 'zentra-landing-page', formLocation }`.
-
-To override the webhook in Vercel: set `NEXT_PUBLIC_N8N_WEBHOOK_URL` in the project env vars.
+`lib/submitLead.js` posts to `NEXT_PUBLIC_N8N_WEBHOOK_URL` (fallback hard-coded to the original webhook), sending `{ ...fields, timestamp, source: 'zentra-landing-page', formLocation }`. Override in Vercel via the `NEXT_PUBLIC_N8N_WEBHOOK_URL` env var. Not wired into the current design — reconnect it when a lead form is added back.
 
 ## Brand (per [zentra_brand_guidelines.pdf](zentra_brand_guidelines.pdf))
 

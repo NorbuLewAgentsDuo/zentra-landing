@@ -1,7 +1,19 @@
+import { Sora, DM_Mono } from 'next/font/google';
 import './globals.css';
 
-// Fonts (Sora + DM Mono) are self-hosted via @font-face in globals.css,
-// shipped with the design export — no next/font needed.
+const sora = Sora({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-sora',
+  display: 'swap',
+});
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-dm-mono',
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Zentra MY: Intelligent Systems for Business Owners',
@@ -11,14 +23,14 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#050406',
+  themeColor: '#040043',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${sora.variable} ${dmMono.variable}`}>
       <body>{children}</body>
     </html>
   );
