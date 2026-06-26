@@ -172,3 +172,18 @@
     .z-h1 { font-size:clamp(38px,11vw,52px) !important; }
   }
 
+
+  /* --- functional additions (behaviour only, no design change) --- */
+  /* scroll-spy: active nav link gets full-white instead of pearl */
+  .z-nav-active { color:#fff !important; }
+
+  /* respect users who ask for less motion */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    .reveal { opacity:1 !important; transform:none !important; transition:none !important; }
+    *, *::before, *::after {
+      animation-duration:0.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important;
+    }
+  }

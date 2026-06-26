@@ -2,22 +2,29 @@
 
 import { useEffect } from 'react';
 
+const MOBILE_BREAKPOINT = 880; // matches the .z-nav media query in globals.css
+
 /**
  * Client island that wires up the static design markup (see landingMarkup.js).
- * Ported 1:1 from the original design export's DCLogic component:
- *   - scroll reveal (.reveal -> .is-visible)
- *   - count-up stats (.z-count[data-count-to])
- *   - mobile menu toggle/close ([data-z-toggle] / [data-z-close] -> [data-z-menu].open)
+ * Ported from the design export's DCLogic, plus functional hardening:
+ *   - scroll reveal (.reveal -> .is-visible)            [respects reduced-motion]
+ *   - count-up stats (.z-count[data-count-to])          [respects reduced-motion]
+ *   - mobile menu ([data-z-toggle]/[data-z-close] -> [data-z-menu].open)
+ *       + close on Escape / outside-click / resize, and body-scroll lock
  *   - exclusive-open FAQ ([data-z-faq-btn] -> [data-faq].open)
- *   - lead-loss calculator (3 sliders -> [data-z-out] labels)
+ *   - lead-loss calculator (3 [data-z-input] sliders -> [data-z-out] labels)
+ *   - scroll-spy: highlight the nav link for the section in view
  */
 export default function DesignInteractions() {
   useEffect(() => {
     const cleanups = [];
+    const reduceMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // --- scroll reveal ---
     const revealEls = Array.from(document.querySelectorAll('.reveal'));
-    if (!('IntersectionObserver' in window)) {
+    if (reduceMotion || !('IntersectionObserver' in window)) {
       revealEls.forEach((e) => e.classList.add('is-visible'));
     } else {
       const io = new IntersectionObserver(
@@ -33,9 +40,16 @@ export default function DesignInteractions() {
       );
       revealEls.forEach((e) => io.observe(e));
       cleanups.push(() => io.disconnect());
+    }
 
-      // --- count-up stats ---
-      const counters = Array.from(document.querySelectorAll('.z-count'));
+    // --- count-up stats ---
+    const counters = Array.from(document.querySelectorAll('.z-count'));
+    const setFinal = (el) =>
+      (el.textContent =
+        (el.dataset.countTo || '') + (el.dataset.countSuffix || ''));
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      counters.forEach(setFinal);
+    } else if (counters.length) {
       const animate = (el) => {
         const to = parseFloat(el.dataset.countTo);
         const suffix = el.dataset.countSuffix || '';
@@ -49,30 +63,36 @@ export default function DesignInteractions() {
         };
         requestAnimationFrame(tick);
       };
-      if (counters.length) {
-        const cio = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((en) => {
-              if (en.isIntersecting) {
-                animate(en.target);
-                cio.unobserve(en.target);
-              }
-            });
-          },
-          { threshold: 0.4 }
-        );
-        counters.forEach((el) => {
-          el.textContent = '0' + (el.dataset.countSuffix || '');
-          cio.observe(el);
-        });
-        cleanups.push(() => cio.disconnect());
-      }
+      const cio = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              animate(en.target);
+              cio.unobserve(en.target);
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      counters.forEach((el) => {
+        el.textContent = '0' + (el.dataset.countSuffix || '');
+        cio.observe(el);
+      });
+      cleanups.push(() => cio.disconnect());
     }
 
-    // --- mobile menu ---
+    // --- mobile menu (with hardening) ---
     const menu = document.querySelector('[data-z-menu]');
-    const setMenu = (open) => menu && menu.classList.toggle('open', open);
-    const onToggle = () => menu && menu.classList.toggle('open');
+    const isOpen = () => menu && menu.classList.contains('open');
+    const setMenu = (open) => {
+      if (!menu) return;
+      menu.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    const onToggle = (e) => {
+      e.stopPropagation();
+      setMenu(!isOpen());
+    };
     const onClose = () => setMenu(false);
     document.querySelectorAll('[data-z-toggle]').forEach((b) => {
       b.addEventListener('click', onToggle);
@@ -82,14 +102,33 @@ export default function DesignInteractions() {
       b.addEventListener('click', onClose);
       cleanups.push(() => b.removeEventListener('click', onClose));
     });
+    const onKeydown = (e) => {
+      if (e.key === 'Escape' && isOpen()) setMenu(false);
+    };
+    const onDocClick = (e) => {
+      if (isOpen() && menu && !menu.contains(e.target) && !e.target.closest('[data-z-toggle]'))
+        setMenu(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth > MOBILE_BREAKPOINT && isOpen()) setMenu(false);
+    };
+    document.addEventListener('keydown', onKeydown);
+    document.addEventListener('click', onDocClick);
+    window.addEventListener('resize', onResize);
+    cleanups.push(() => document.removeEventListener('keydown', onKeydown));
+    cleanups.push(() => document.removeEventListener('click', onDocClick));
+    cleanups.push(() => window.removeEventListener('resize', onResize));
+    cleanups.push(() => {
+      document.body.style.overflow = '';
+    });
 
     // --- FAQ accordion (exclusive open) ---
     const onFaq = (e) => {
       const item = e.currentTarget.closest('[data-faq]');
       if (!item) return;
-      const isOpen = item.classList.contains('open');
+      const wasOpen = item.classList.contains('open');
       document.querySelectorAll('[data-faq].open').forEach((el) => el.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
+      if (!wasOpen) item.classList.add('open');
     };
     document.querySelectorAll('[data-z-faq-btn]').forEach((b) => {
       b.addEventListener('click', onFaq);
@@ -127,6 +166,33 @@ export default function DesignInteractions() {
       cleanups.push(() => input.removeEventListener('input', onInput));
     });
     render();
+
+    // --- scroll-spy: highlight active section in the nav ---
+    const navLinks = Array.from(document.querySelectorAll('.z-nav-links a[href^="#"]'));
+    if ('IntersectionObserver' in window && navLinks.length) {
+      const byId = new Map(
+        navLinks.map((a) => [a.getAttribute('href').slice(1), a]).filter(([id]) => id)
+      );
+      const sections = [...byId.keys()]
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+      const setActive = (id) => {
+        navLinks.forEach((a) =>
+          a.classList.toggle('z-nav-active', a.getAttribute('href') === '#' + id)
+        );
+      };
+      const spy = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((en) => en.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (visible) setActive(visible.target.id);
+        },
+        { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+      );
+      sections.forEach((s) => spy.observe(s));
+      cleanups.push(() => spy.disconnect());
+    }
 
     return () => cleanups.forEach((fn) => fn());
   }, []);
