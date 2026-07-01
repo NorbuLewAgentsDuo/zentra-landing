@@ -127,10 +127,8 @@
 
 
 
-  /* ============================================================
-     Design CSS — verbatim from Zentra MY.dc.html <style>.
-     (Archivo/Sora/DM Mono are loaded via the <link> in app/layout.js.)
-     ============================================================ */
+/*__ZENTRA_DESIGN_CSS_START__*/
+  /* Design CSS — verbatim from Zentra MY.dc.html <style>. Do not hand-edit; re-run scripts/port-design.mjs. */
   html { scroll-behavior:smooth; }
   body { margin:0; background:#050406; color:#EDEBF5; font-family:'Sora',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   ::selection { background:#0021F3; color:#fff; }
@@ -178,6 +176,7 @@
     .z-how { grid-template-columns:1fr !important; }
     .z-sidelbl { display:none !important; }
   }
+/*__ZENTRA_DESIGN_CSS_END__*/
 
 
   /* --- functional additions (behaviour only, no design change) --- */
