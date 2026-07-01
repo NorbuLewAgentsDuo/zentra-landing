@@ -41,6 +41,10 @@ body = body.split('assets/zentra-icon.png').join('/assets/design/06660a1d-9154-4
 const beforeBrand = body.length;
 body = body.replace('color:#fff; text-transform:uppercase;">Zentra</span>', 'color:#fff; text-transform:uppercase;">Zentra MY</span>');
 if (body.length === beforeBrand) throw new Error('nav brand wordmark not found');
+// footer brand wordmark (after the nav swap, the only remaining >Zentra</span>).
+const beforeFooterBrand = body.length;
+body = body.replace('text-transform:uppercase;">Zentra</span>', 'text-transform:uppercase;">Zentra MY</span>');
+if (body.length === beforeFooterBrand) throw new Error('footer brand wordmark not found');
 
 // --- pricing: hybrid "from RM…" anchors + Custom tier (3 cards) ---
 // The export ships 2 hard-priced cards; Norbu wants soft anchors (exact price
