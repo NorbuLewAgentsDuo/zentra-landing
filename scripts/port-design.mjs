@@ -71,7 +71,7 @@ const pricingSection = `<!-- ===================== PRICING =====================
 
       <!-- Starter -->
       <div class="z-card" style="background:linear-gradient(160deg,#0a0919,#0d0b1c); border:1px solid rgba(193,191,227,0.18); padding:clamp(26px,3vw,38px); display:flex; flex-direction:column;">
-        <div class="z-mono" style="font-size:13px; font-weight:500; color:#C1BFE3; letter-spacing:0.04em;">STARTER — LEAD RESPONDER</div>
+        <div class="z-mono" style="font-size:13px; font-weight:500; color:#C1BFE3; letter-spacing:0.04em;">STARTER · LEAD RESPONDER</div>
         <div style="display:flex; align-items:flex-end; gap:7px; margin:18px 0 2px;">
           <span style="font-size:13px; color:#8d8bc4; padding-bottom:9px;">from</span>
           <span class="z-disp" style="font-size:clamp(30px,4vw,40px); font-weight:800; letter-spacing:-0.02em;">RM 1,200</span>
@@ -98,11 +98,11 @@ const pricingSection = `<!-- ===================== PRICING =====================
         </div>
         <div class="z-mono" style="font-size:12px; color:rgba(255,255,255,0.65); margin-bottom:26px;">exact price set on your audit · 3-month minimum</div>
         <div style="display:flex; flex-direction:column; gap:13px; margin-bottom:30px;">
-          ${feat(chk('#fff'), 'The full lead system — capture, 60-sec replies, qualifying &amp; nurture', '#fff')}
+          ${feat(chk('#fff'), 'The full lead system: capture, 60-sec replies, qualifying &amp; nurture', '#fff')}
           ${feat(chk('#fff'), 'Content automation on FB / IG / WhatsApp', '#fff')}
           ${feat(chk('#fff'), 'Your live pipeline dashboard', '#fff')}
           ${feat(chk('#fff'), 'First <span style="font-weight:700;">50 old leads reactivated free</span>', '#fff')}
-          ${feat(chk('#fff'), '60-second reply guarantee — or the month is free', '#fff')}
+          ${feat(chk('#fff'), '60-second reply guarantee, or the month is free', '#fff')}
         </div>
         <a href="#book" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:9px; padding:16px; background:#fff; color:#0021F3; font-size:15px; font-weight:700; text-decoration:none;">Book a free lead audit
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
@@ -111,7 +111,7 @@ const pricingSection = `<!-- ===================== PRICING =====================
 
       <!-- Growth / Custom -->
       <div class="z-card" style="background:linear-gradient(160deg,#0a0919,#0d0b1c); border:1px solid rgba(193,191,227,0.18); padding:clamp(26px,3vw,38px); display:flex; flex-direction:column;">
-        <div class="z-mono" style="font-size:13px; font-weight:500; color:#C1BFE3; letter-spacing:0.04em;">GROWTH — CUSTOM</div>
+        <div class="z-mono" style="font-size:13px; font-weight:500; color:#C1BFE3; letter-spacing:0.04em;">GROWTH · CUSTOM</div>
         <div style="display:flex; align-items:flex-end; gap:7px; margin:18px 0 2px;">
           <span class="z-disp" style="font-size:clamp(30px,4vw,40px); font-weight:800; letter-spacing:-0.02em;">Tailored</span>
         </div>
@@ -134,6 +134,46 @@ const pricingSection = `<!-- ===================== PRICING =====================
 if (!/<!-- =+ PRICING =+ -->/.test(body) || !/<!-- =+ CALCULATOR =+ -->/.test(body))
   throw new Error('pricing/calculator section markers not found');
 body = body.replace(/<!-- =+ PRICING =+ -->[\s\S]*?(?=<!-- =+ CALCULATOR =+ -->)/, pricingSection);
+
+// --- de-dash the copy: em/en dashes read as AI-generated. Each is rewritten
+// to a natural comma / colon / period. Compound hyphens (done-for-you,
+// 60-second, multi-agent) are correct English and kept on purpose. ---
+const dedash = [
+  [' — day or night', ', day or night'],
+  ['Yes — RM 1.28M', 'Yes! RM 1.28M'],
+  ['10:47pm — and', '10:47pm, and'],
+  ['on weekends — exactly', 'on weekends, exactly'],
+  ['Instagram — leads slip', 'Instagram, and leads slip'],
+  ['7am — while', '7am, while'],
+  ['RM 5,000–20,000', 'RM 5,000 to 20,000'],
+  ['at the end — to close', 'at the end, to close'],
+  ['on-brand answer — then it qualifies', 'on-brand answer, then it qualifies'],
+  ['keep leads warm — and ping you', 'keep leads warm, and ping you'],
+  ["proves it's working — your pipeline, live", "proves it's working: your pipeline, live"],
+  ['budget and timeline — automatically', 'budget and timeline, automatically'],
+  ['new leads keep coming — done for you', 'new leads keep coming. Done for you'],
+  ['every hot deal — proof', 'every hot deal. Proof'],
+  ['You — over weeks', 'You, over weeks'],
+  ['We do — fully managed', 'We do, fully managed'],
+  ['750/month</span> — and', '750/month</span>, and'],
+  ['>No — we can build', '>No, we can build'],
+  ['within 60 seconds — or that month is free', 'within 60 seconds, or that month is free'],
+  ['the reply speed — not you', 'the reply speed, not you'],
+  ['free audit — in the context', 'free audit, in the context'],
+  ['Plug the leak — book your audit', 'Plug the leak, book your audit'],
+  ['every single one — automatically', 'every single one, automatically'],
+  ['one-line quote — ready to drop', 'one-line quote, ready to drop'],
+  ['a full lead system — it replies', 'a full lead system: it replies'],
+  ['part-time hire — with none', 'part-time hire, with none'],
+  ['with your team — it just happens', 'with your team, it just happens'],
+  ['full control — and can step', 'full control, and can step'],
+  ['the system — not your schedule — does the replying', 'the system, not your schedule, does the replying'],
+  ['no jargon — just your numbers', 'no jargon, just your numbers'],
+  ['>— with us —<', '>· with us ·<'],
+];
+for (const [a, b] of dedash) body = body.split(a).join(b);
+const leftEm = (body.replace(/<[^>]+>/g, ' ').match(/[—–]/g) || []).length;
+if (leftEm) console.warn('WARNING: ' + leftEm + ' em/en dash(es) still in copy');
 
 // guard: nothing template-y or React-y should survive
 for (const bad of ['{{', 'onClick=', 'onChange=', '<x-dc', '<helmet']) {
