@@ -1,7 +1,8 @@
 import './globals.css';
 
-// Fonts (Sora + DM Mono) are self-hosted via @font-face in globals.css,
-// shipped with the design export — no next/font needed.
+// Sora + DM Mono are self-hosted via @font-face in globals.css. The newest
+// design also uses Archivo (the .z-disp display face), which isn't bundled —
+// it's loaded from Google Fonts via the <link> in the layout head below.
 
 // Production URL drives canonical + Open Graph absolute image URLs.
 // Override in Vercel via NEXT_PUBLIC_SITE_URL. TODO: bake the real domain here.
@@ -42,6 +43,14 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

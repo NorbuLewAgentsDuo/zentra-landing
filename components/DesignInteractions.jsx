@@ -167,6 +167,56 @@ export default function DesignInteractions() {
     });
     render();
 
+    // --- hero particle wave (canvas #zwave) ---
+    const canvas = document.getElementById('zwave');
+    if (canvas && canvas.getContext && !reduceMotion) {
+      const ctx = canvas.getContext('2d');
+      const DPR = Math.min(2, window.devicePixelRatio || 1);
+      const resize = () => {
+        canvas.width = canvas.clientWidth * DPR;
+        canvas.height = canvas.clientHeight * DPR;
+      };
+      resize();
+      window.addEventListener('resize', resize);
+      const cols = 76;
+      const rows = 30;
+      let t = 0;
+      let raf;
+      const loop = () => {
+        const W = canvas.width;
+        const H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+        for (let j = 0; j < rows; j++) {
+          for (let i = 0; i < cols; i++) {
+            const u = i / (cols - 1);
+            const v = j / (rows - 1);
+            const wave =
+              Math.sin(u * 9 + t) * Math.cos(v * 5 - t * 0.6) +
+              Math.sin(u * 4 - v * 6 + t * 0.4) * 0.5;
+            const depth = v;
+            const x = (u - 0.5) * W * (0.78 + depth * 0.46) + W * 0.5;
+            const baseY = H * 0.16 + v * H * 0.72;
+            const y = baseY - wave * 20 * DPR * (0.4 + depth);
+            const r = Math.max(0.4, (0.5 + depth * 1.7) * DPR);
+            let a = 0.1 + depth * 0.5 + wave * 0.14;
+            a = Math.max(0, Math.min(0.85, a));
+            const g = Math.round(150 + wave * 42);
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(' + g + ',' + (g + 6) + ',' + Math.min(255, g + 34) + ',' + a + ')';
+            ctx.arc(x, y, r, 0, 6.283);
+            ctx.fill();
+          }
+        }
+        t += 0.015;
+        raf = requestAnimationFrame(loop);
+      };
+      loop();
+      cleanups.push(() => {
+        if (raf) cancelAnimationFrame(raf);
+        window.removeEventListener('resize', resize);
+      });
+    }
+
     // --- scroll-spy: highlight active section in the nav ---
     const navLinks = Array.from(document.querySelectorAll('.z-nav-links a[href^="#"]'));
     if ('IntersectionObserver' in window && navLinks.length) {

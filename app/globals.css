@@ -126,27 +126,34 @@
 }
 
 
-  html { scroll-behavior: smooth; }
-  body { margin:0; background:#050406; color:#fff; font-family:'Sora',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+  /* ============================================================
+     Design CSS — verbatim from Zentra MY.dc.html <style>.
+     (Archivo/Sora/DM Mono are loaded via the <link> in app/layout.js.)
+     ============================================================ */
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:#050406; color:#EDEBF5; font-family:'Sora',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   ::selection { background:#0021F3; color:#fff; }
   *::-webkit-scrollbar { height:8px; width:8px; }
   *::-webkit-scrollbar-thumb { background:rgba(193,191,227,0.22); border-radius:8px; }
-  section[id], div[id] { scroll-margin-top:84px; }
+  section[id], div[id] { scroll-margin-top:88px; }
   .z-mono { font-family:'DM Mono',monospace; font-variant-numeric:tabular-nums; }
-  .z-grad { background:linear-gradient(135deg,#6f86ff 0%,#C1BFE3 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
-  .reveal { opacity:0; transform:translateY(20px); transition:opacity .7s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1); }
+  .z-disp { font-family:'Archivo',sans-serif; }
+  .z-hl { background:#0021F3; color:#fff; padding:0 .12em; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  .z-grad { background:linear-gradient(100deg,#6f86ff,#C1BFE3); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1); }
   .reveal.is-visible { opacity:1; transform:none; }
-  @keyframes zfloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
   @keyframes zblink { 0%,100%{opacity:1} 50%{opacity:.25} }
-  @keyframes zpulse { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)} 70%{box-shadow:0 0 0 9px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+  @keyframes zfloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+  @keyframes zglow { 0%,100%{opacity:.45} 50%{opacity:.85} }
   @keyframes zbubble { from{opacity:0; transform:translateY(8px) scale(.97)} to{opacity:1; transform:none} }
   @keyframes ztype { 0%{opacity:.3} 50%{opacity:1} 100%{opacity:.3} }
-  @keyframes zglow { 0%,100%{opacity:.5} 50%{opacity:.9} }
+  @keyframes zspin { to{transform:rotate(360deg)} }
   .z-replybubble { animation:zbubble .6s cubic-bezier(.22,.68,0,1) both; }
   .z-dot1{animation:ztype 1.2s infinite}.z-dot2{animation:ztype 1.2s .2s infinite}.z-dot3{animation:ztype 1.2s .4s infinite}
-  .z-range { -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:6px; background:rgba(193,191,227,0.18); outline:none; }
-  .z-range::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:#0021F3; border:3px solid #cdd6ff; cursor:pointer; box-shadow:0 4px 14px -2px rgba(0,33,243,.7); }
-  .z-range::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:#0021F3; border:3px solid #cdd6ff; cursor:pointer; }
+  .z-range { -webkit-appearance:none; appearance:none; width:100%; height:5px; background:rgba(193,191,227,0.18); outline:none; }
+  .z-range::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; background:#0021F3; border:3px solid #cdd6ff; cursor:pointer; box-shadow:0 4px 14px -2px rgba(0,33,243,.7); }
+  .z-range::-moz-range-thumb { width:18px; height:18px; background:#0021F3; border:3px solid #cdd6ff; cursor:pointer; }
   .z-hamburger { display:none; }
   .z-mobilemenu { transform:translateY(-12px); opacity:0; pointer-events:none; transition:opacity .28s ease, transform .28s ease; }
   .z-mobilemenu.open { transform:none; opacity:1; pointer-events:auto; }
@@ -154,22 +161,22 @@
   .z-faq.open .z-faq-a { max-height:320px; opacity:1; }
   .z-faq-plus { transition:transform .35s cubic-bezier(.22,.68,0,1); }
   .z-faq.open .z-faq-plus { transform:rotate(45deg); }
-  .z-faq.open .z-faq-q { color:#fff !important; }
-  .z-faq:hover .z-faq-q { color:#fff; }
-  .z-aud { transition:transform .4s cubic-bezier(.22,.68,0,1), border-color .4s ease, background .4s ease; }
-  .z-aud:hover { transform:translateY(-4px); border-color:rgba(0,33,243,0.5) !important; }
-  @media (max-width:880px){
+  .z-faq.open .z-faq-q, .z-faq:hover .z-faq-q { color:#fff !important; }
+  .z-card { transition:transform .4s cubic-bezier(.22,.68,0,1), border-color .4s ease; }
+  .z-card:hover { transform:translateY(-4px); border-color:rgba(0,33,243,0.55) !important; }
+  @media (max-width:900px){
     .z-nav-links { display:none !important; }
     .z-nav-cta { display:none !important; }
     .z-hamburger { display:flex !important; }
   }
-  @media (max-width:960px){
-    .z-hero { grid-template-columns:1fr !important; gap:48px !important; }
+  @media (max-width:980px){
+    .z-herolow { grid-template-columns:1fr !important; }
     .z-2col { grid-template-columns:1fr !important; }
-    .z-how { grid-template-columns:1fr !important; }
+    .z-how { grid-template-columns:1fr 1fr !important; }
   }
-  @media (max-width:700px){
-    .z-h1 { font-size:clamp(38px,11vw,52px) !important; }
+  @media (max-width:620px){
+    .z-how { grid-template-columns:1fr !important; }
+    .z-sidelbl { display:none !important; }
   }
 
 

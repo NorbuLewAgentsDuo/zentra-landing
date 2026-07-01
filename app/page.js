@@ -2,7 +2,6 @@ import markup from '@/components/landingMarkup';
 import DesignInteractions from '@/components/DesignInteractions';
 import SiteChrome from '@/components/SiteChrome';
 import StructuredData from '@/components/StructuredData';
-import Infographics from '@/components/Infographics';
 import { whatsappBase, bookingUrl } from '@/lib/config';
 
 // The page body is the exact static markup from Norbu's design export
@@ -32,18 +31,6 @@ function enhance(html) {
       'data-z-input="replyRate" aria-label="Percent of leads you reply to within minutes"'
     )
     .replace('data-z-out="lostMonthLabel"', 'data-z-out="lostMonthLabel" aria-live="polite"');
-  // balanced mount-points for the animated infographics. Each is a complete
-  // <div> inserted between two design sections; Infographics portals into them.
-  const mounts = [
-    ['<!-- ===================== BUILT FOR (audience) ===================== -->', 'z-kpi-mount'],
-    ['<!-- ===================== HOW IT WORKS ===================== -->', 'z-speed-mount'],
-    ['<!-- ===================== THE SYSTEM ===================== -->', 'z-beforeafter-mount'],
-    ['<!-- ===================== VS DIY (comparison) ===================== -->', 'z-flywheel-mount'],
-    ['<!-- ===================== FAQ ===================== -->', 'z-leak-mount'],
-  ];
-  for (const [marker, id] of mounts) {
-    out = out.replace(marker, `<div id="${id}"></div>\n${marker}`);
-  }
   return out;
 }
 
@@ -53,7 +40,6 @@ export default function Page() {
     <>
       <StructuredData />
       <div dangerouslySetInnerHTML={{ __html: html }} />
-      <Infographics />
       <DesignInteractions />
       <SiteChrome />
     </>
