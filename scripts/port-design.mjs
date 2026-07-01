@@ -36,6 +36,12 @@ for (const [from, to] of repl) body = body.split(from).join(to);
 // logo -> the export image already self-hosted in /public/assets/design
 body = body.split('assets/zentra-icon.png').join('/assets/design/06660a1d-9154-4c8e-b479-bf8f9428e4aa.png');
 
+// nav brand wordmark -> full company name "Zentra MY" (top of the page).
+// The nav span is the only Zentra wordmark styled with color:#fff.
+const beforeBrand = body.length;
+body = body.replace('color:#fff; text-transform:uppercase;">Zentra</span>', 'color:#fff; text-transform:uppercase;">Zentra MY</span>');
+if (body.length === beforeBrand) throw new Error('nav brand wordmark not found');
+
 // --- pricing: hybrid "from RM…" anchors + Custom tier (3 cards) ---
 // The export ships 2 hard-priced cards; Norbu wants soft anchors (exact price
 // set on the audit) plus a bespoke Growth/Custom tier. Rebuilt here so a
