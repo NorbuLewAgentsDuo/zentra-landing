@@ -175,6 +175,15 @@ for (const [a, b] of dedash) body = body.split(a).join(b);
 const leftEm = (body.replace(/<[^>]+>/g, ' ').match(/[—–]/g) || []).length;
 if (leftEm) console.warn('WARNING: ' + leftEm + ' em/en dash(es) still in copy');
 
+// --- Results: drop the empty "RESERVED" testimonial placeholder (the dashed
+// box) and let the real testimonial run full-width. ---
+const beforeReserved = body.length;
+body = body
+  .replace(/\s*<div style="background:rgba\(255,255,255,0\.02\); border:1\.5px dashed[\s\S]*?<\/span>\s*<\/div>\s*<\/div>/, '')
+  .replace('grid-template-columns:1.3fr 0.7fr', 'grid-template-columns:1fr');
+if (body.length === beforeReserved || body.includes('border:1.5px dashed'))
+  throw new Error('reserved testimonial placeholder not removed');
+
 // guard: nothing template-y or React-y should survive
 for (const bad of ['{{', 'onClick=', 'onChange=', '<x-dc', '<helmet']) {
   if (body.includes(bad)) throw new Error('Leftover token in markup: ' + bad);
