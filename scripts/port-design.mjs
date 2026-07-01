@@ -184,6 +184,22 @@ body = body
 if (body.length === beforeReserved || body.includes('border:1.5px dashed'))
   throw new Error('reserved testimonial placeholder not removed');
 
+// --- Final CTA: book via Cal.com, not WhatsApp. Switch the primary button to
+// href="#book" so page.js rewrites it to bookingUrl (Cal.com) like every other
+// booking CTA, and swap the WhatsApp glyph for a calendar icon. ---
+const bookCta =
+  '<a href="#book" style="display:inline-flex; align-items:center; gap:10px; padding:18px 32px; background:#0021F3; color:#fff; font-size:16px; font-weight:600; text-decoration:none; box-shadow:0 16px 44px -14px rgba(0,33,243,0.95);">\n' +
+  '        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>\n' +
+  '        Book a free lead audit\n' +
+  '      </a>';
+const beforeCta = body.length;
+body = body.replace(
+  /<a href="https:\/\/wa\.me\/60123456789\?text=Hi%20Zentra%2C%20I'd%20like%20to%20book%20a%20free%20lead%20audit"[\s\S]*?Book on WhatsApp\s*<\/a>/,
+  bookCta
+);
+if (body.length === beforeCta || body.includes('Book on WhatsApp'))
+  throw new Error('final-CTA WhatsApp button not converted to Cal.com booking');
+
 // guard: nothing template-y or React-y should survive
 for (const bad of ['{{', 'onClick=', 'onChange=', '<x-dc', '<helmet']) {
   if (body.includes(bad)) throw new Error('Leftover token in markup: ' + bad);

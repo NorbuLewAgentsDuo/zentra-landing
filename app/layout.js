@@ -14,7 +14,7 @@ const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID || 'xfoiggn8mm';
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zentra-landing.vercel.app';
 const title = 'Zentra MY: Never lose another lead';
 const description =
-  'Done-for-you AI lead system for Malaysian property agents. Every enquiry answered in 60 seconds, qualified, and followed up automatically — you just close.';
+  'Done-for-you AI lead system for Malaysian property agents. Every enquiry answered in 60 seconds, qualified, and followed up automatically. You just close.';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
