@@ -1,8 +1,13 @@
 import './globals.css';
+import Script from 'next/script';
 
 // Sora + DM Mono are self-hosted via @font-face in globals.css. The newest
 // design also uses Archivo (the .z-disp display face), which isn't bundled —
 // it's loaded from Google Fonts via the <link> in the layout head below.
+
+// Microsoft Clarity (heatmaps + session analytics). Override/disable in Vercel
+// via NEXT_PUBLIC_CLARITY_ID; loaded after hydration so it never blocks render.
+const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID || 'xfoiggn8mm';
 
 // Production URL drives canonical + Open Graph absolute image URLs.
 // Override in Vercel via NEXT_PUBLIC_SITE_URL. TODO: bake the real domain here.
@@ -52,6 +57,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>{children}</body>
+      {clarityId ? (
+        <Script id="ms-clarity" strategy="afterInteractive">
+          {`(function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "${clarityId}");`}
+        </Script>
+      ) : null}
     </html>
   );
 }
