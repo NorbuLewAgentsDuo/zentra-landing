@@ -12,11 +12,12 @@ import { whatsappBase, bookingUrl } from '@/lib/config';
 function enhance(html) {
   // wa.me chat links -> real number (keeps each link's ?text= prefill)
   let out = html.split('https://wa.me/60123456789').join(whatsappBase);
-  // "Book a free lead audit" CTAs -> external scheduler (new tab) when set;
-  // otherwise leave them as in-page anchors to the #book section.
+  // The audit form at #book is the primary conversion, so "book" CTAs stay as
+  // in-page anchors. Only the explicit "Pick a time" link ([data-z-booking])
+  // hands off to the external scheduler.
   if (bookingUrl) {
     out = out
-      .split('href="#book"')
+      .split('href="#book" data-z-booking=""')
       .join(`href="${bookingUrl}" target="_blank" rel="noopener"`);
   }
   // calculator accessibility: label the sliders and announce the headline result

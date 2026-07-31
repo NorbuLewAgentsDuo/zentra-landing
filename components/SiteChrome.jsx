@@ -36,8 +36,10 @@ export default function SiteChrome() {
     };
   }, []);
 
-  const bookHref = bookingUrl || '#book';
-  const external = Boolean(bookingUrl);
+  // The audit form at #book is the primary conversion, so the sticky CTA scrolls
+  // to it rather than jumping straight out to the scheduler.
+  const bookHref = '#book';
+  const external = false;
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function SiteChrome() {
           target={external ? '_blank' : undefined}
           rel={external ? 'noopener' : undefined}
         >
-          Book free audit
+          Book my audit
         </a>
         <a className="z-mcta-wa" href={whatsappBookHref} target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

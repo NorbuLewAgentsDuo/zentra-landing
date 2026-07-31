@@ -156,7 +156,7 @@
   .z-mobilemenu { transform:translateY(-12px); opacity:0; pointer-events:none; transition:opacity .28s ease, transform .28s ease; }
   .z-mobilemenu.open { transform:none; opacity:1; pointer-events:auto; }
   .z-faq-a { max-height:0; opacity:0; overflow:hidden; transition:max-height .5s cubic-bezier(.22,.68,0,1), opacity .35s ease; }
-  .z-faq.open .z-faq-a { max-height:320px; opacity:1; }
+  .z-faq.open .z-faq-a { max-height:560px; opacity:1; }
   .z-faq-plus { transition:transform .35s cubic-bezier(.22,.68,0,1); }
   .z-faq.open .z-faq-plus { transform:rotate(45deg); }
   .z-faq.open .z-faq-q, .z-faq:hover .z-faq-q { color:#fff !important; }
@@ -239,3 +239,29 @@
   /* --- flywheel rotation (disabled under reduced-motion via the block above) --- */
   @keyframes zspin { to { transform: rotate(360deg); } }
   .z-flywheel-ring { animation: zspin 26s linear infinite; }
+
+  /* --- lead-leak audit form (#book) --- */
+  .z-field {
+    width:100%; box-sizing:border-box;
+    padding:13px 14px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(193,191,227,0.22);
+    color:#fff; font-family:inherit; font-size:14.5px; line-height:1.4;
+    border-radius:0; -webkit-appearance:none; appearance:none;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .z-field::placeholder { color:#56557e; }
+  .z-field:hover { border-color:rgba(193,191,227,0.38); }
+  .z-field:focus { outline:none; border-color:#0021F3; background:rgba(0,33,243,0.08); }
+  .z-field:focus-visible { outline:2px solid #6f86ff; outline-offset:2px; }
+  .z-field[aria-invalid="true"] { border-color:#ff4d67; }
+  textarea.z-field { resize:vertical; min-height:88px; }
+  select.z-field {
+    background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23C1BFE3' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center; padding-right:40px;
+  }
+  select.z-field option { background:#0a0919; color:#fff; }
+  [data-z-submit][disabled] { opacity:0.6; cursor:not-allowed; }
+  @media (max-width:560px) {
+    #book form > div { grid-template-columns:1fr !important; }
+  }

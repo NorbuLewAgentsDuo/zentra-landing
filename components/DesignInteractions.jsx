@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { submitLead, isValidPhone } from '@/lib/submitLead';
 
 const MOBILE_BREAKPOINT = 880; // matches the .z-nav media query in globals.css
 
@@ -136,7 +137,7 @@ export default function DesignInteractions() {
     });
 
     // --- lead-loss calculator ---
-    const state = { leads: 40, commission: 8000, replyRate: 30 };
+    const state = { leads: 200, commission: 8000, replyRate: 30 };
     const fmt = (n) => Math.round(n).toLocaleString('en-MY');
     const out = (key) => document.querySelector(`[data-z-out="${key}"]`);
     const render = () => {
@@ -242,6 +243,64 @@ export default function DesignInteractions() {
       );
       sections.forEach((s) => spy.observe(s));
       cleanups.push(() => spy.disconnect());
+    }
+
+    // --- lead-leak audit form (#book) ---
+    const form = document.querySelector('[data-z-form]');
+    if (form) {
+      const msg = form.querySelector('[data-z-form-msg]');
+      const submit = form.querySelector('[data-z-submit]');
+      const say = (text, tone) => {
+        if (!msg) return;
+        msg.textContent = text;
+        msg.style.color = tone === 'error' ? '#ff8ea0' : tone === 'ok' ? '#7ee2a8' : '#8d8bc4';
+      };
+
+      const onSubmit = async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form).entries());
+
+        // Validate before we bother the network; focus the first offender so
+        // mobile users aren't hunting for what's wrong.
+        const required = ['name', 'businessName', 'phone', 'area', 'monthlyEnquiries', 'mainProblem'];
+        let firstBad = null;
+        for (const key of required) {
+          const field = form.elements[key];
+          const ok = String(data[key] || '').trim().length > 0;
+          if (field) field.setAttribute('aria-invalid', ok ? 'false' : 'true');
+          if (!ok && !firstBad) firstBad = field;
+        }
+        if (firstBad) {
+          firstBad.focus();
+          say('Please fill in the highlighted fields.', 'error');
+          return;
+        }
+        if (!isValidPhone(String(data.phone))) {
+          form.elements.phone.setAttribute('aria-invalid', 'true');
+          form.elements.phone.focus();
+          say('That WhatsApp number looks incomplete.', 'error');
+          return;
+        }
+
+        submit.disabled = true;
+        say('Sending…');
+        try {
+          await submitLead({ ...data, formLocation: 'book-audit' });
+          form.style.display = 'none';
+          const done = document.createElement('div');
+          done.setAttribute('role', 'status');
+          done.innerHTML =
+            '<div style="font-size:20px; font-weight:600; color:#fff; margin-bottom:12px;">Got it — check WhatsApp.</div>' +
+            '<div style="font-size:15px; color:#C1BFE3; line-height:1.6;">We&rsquo;ll message you shortly to lock in a time. If you want to jump the queue, message us first and mention the audit.</div>';
+          form.parentElement.appendChild(done);
+        } catch {
+          submit.disabled = false;
+          say('That didn’t send. Message us on WhatsApp instead and we’ll sort it out.', 'error');
+        }
+      };
+
+      form.addEventListener('submit', onSubmit);
+      cleanups.push(() => form.removeEventListener('submit', onSubmit));
     }
 
     return () => cleanups.forEach((fn) => fn());

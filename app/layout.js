@@ -12,9 +12,9 @@ const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID || 'xfoiggn8mm';
 // Production URL drives canonical + Open Graph absolute image URLs.
 // Override in Vercel via NEXT_PUBLIC_SITE_URL. TODO: bake the real domain here.
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zentra-landing.vercel.app';
-const title = 'Zentra MY: Never lose another lead';
+const title = 'Zentra MY: Stop abandoning the leads you already paid for';
 const description =
-  'Done-for-you AI lead system for Malaysian property agents. Every enquiry answered in 60 seconds, qualified, and followed up automatically. You just close.';
+  'Done-for-you lead-to-viewing system for Malaysian property agents. Zentra replies on WhatsApp, qualifies, follows up across the full decision cycle, revives your dormant leads, and books the viewing. Five founding implementations.';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
