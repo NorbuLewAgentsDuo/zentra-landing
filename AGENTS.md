@@ -1,59 +1,19 @@
-# AGENTS.md
+# Zentra landing — working instructions
 
-This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+Updated 2026-09-15 after the user-approved rebuild. This supersedes the former design-export-only workflow.
 
-## Project Overview
+## Active architecture
 
-Zentra MY is a Next.js (App Router) landing page for Zentra — an AI lead conversion system targeting Malaysian B2C service businesses. Deployed on Vercel. Lead submissions are posted to an n8n webhook.
+Next.js 15 App Router, React 19, JavaScript and plain CSS. The active server page supplies schema and renders `components/LandingPage.jsx`. Shared workflow, testimonial and FAQ data live in `lib/siteContent.js`. Styles and self-hosted Sora/DM Mono fonts are in `app/globals.css`. The generated-export page is archived in `legacy/generated-export/`; the remaining old components are inactive and must not be reintroduced as proof.
 
-## Tech Stack
+## Product and content
 
-- Next.js 15 (App Router, JS)
-- React 19
-- `next/font` for Sora + DM Mono (no external Google Fonts link)
-- Plain CSS in [app/globals.css](app/globals.css) — no Tailwind, no CSS-in-JS
-- Vercel for hosting
+The user broadened the page on 2026-09-16 to businesses with inbound enquiries that lead to appointments or consultations; retain Klang Valley as the service area. Sell the enquiry-to-consultation service, using a clearly fictional workflow demo and a free pilot whose scope is agreed individually. Human exceptions and client participation remain visible. No guaranteed sales, fixed pilot limits, arbitrary prices, scarcity, fake live metrics or unverified testimonials. Akira and ezekutee videos are previous client experiences, not proof of this pilot’s outcomes. Countdown banners require an explicit genuine deadline and label; no rolling or invented scarcity.
 
-## Development Commands
+## Forms and environment
 
-```bash
-npm run dev      # next dev on :3000
-npm run build    # production build
-npm run start    # serve production build locally
-npm run lint     # next lint
-```
+`/api/lead` delegates to `lib/lead-handler.mjs`. Explicit server `N8N_WEBHOOK_URL` is required; optional `DASHBOARD_LEADS_URL` and `DASHBOARD_LEADS_KEY` mirror confirmed submissions. No hardcoded live destinations. Validate consent and required fields; stamp source/time server-side. Required delivery failure is an error, not a success. Test with mocked integrations, never real lead workflows. See README for configuration. Clarity requires an explicit production ID; leave it unset locally.
 
-## Architecture
+## Checks and release
 
-### Directory Layout
-
-The current homepage is a faithful port of Norbu's design export (`Zentra MY.html`). The static markup is rendered verbatim; only the interactivity is React.
-
-- [app/layout.js](app/layout.js) — root layout + metadata. Fonts (Sora + DM Mono) are self-hosted via `@font-face` in globals.css — **no `next/font`**.
-- [app/page.js](app/page.js) — renders the design markup via `dangerouslySetInnerHTML` and mounts `DesignInteractions`.
-- [app/globals.css](app/globals.css) — the design's CSS verbatim (self-hosted `@font-face`, brand tokens, keyframes, responsive rules). Generated from the export; edit the design or re-run the unpack, don't hand-tune.
-- [components/landingMarkup.js](components/landingMarkup.js) — **generated** static HTML string (the whole page body). Template bindings (`{{ }}`) were resolved to `data-z-*` hooks. Don't hand-edit; regenerate from the design export.
-- [components/DesignInteractions.jsx](components/DesignInteractions.jsx) — the single `'use client'` island. Ports the export's `DCLogic` 1:1: scroll reveal (`.reveal`), count-up stats (`.z-count`), mobile menu (`[data-z-toggle]/[data-z-close]` → `[data-z-menu].open`), exclusive-open FAQ (`[data-z-faq-btn]` → `[data-faq].open`), and the lead-loss calculator (3 `[data-z-input]` sliders → `[data-z-out]` labels).
-- [public/assets/design/](public/assets/design/) — the export's self-hosted fonts (6× woff2) + image, referenced by globals.css and the markup.
-- [lib/submitLead.js](lib/submitLead.js) — n8n webhook submitter. **Currently unused** — the new design has no lead form (CTAs are anchors to `#book` / WhatsApp). Kept for when a form is reintroduced.
-- [legacy/](legacy/) — superseded versions, not shipped. `legacy/react-app/` holds the previous React-component site (Nav/Hero/Stats/… + globals.css); `legacy/index.html` etc. are the pre-migration static HTML.
-
-### Updating the design
-
-The page is a port of a design-tool export, not hand-authored React. To change content/layout, edit the design and re-export, then re-unpack: decode the bundle's manifest+template, resolve the `{{ }}` bindings to `data-z-*` hooks, and regenerate `components/landingMarkup.js` + `app/globals.css` + `public/assets/design/`. If you add interactivity, wire it in `DesignInteractions.jsx` by `data-*` selector (don't put logic in the markup).
-
-### n8n Integration
-
-`lib/submitLead.js` posts to `NEXT_PUBLIC_N8N_WEBHOOK_URL` (fallback hard-coded to the original webhook), sending `{ ...fields, timestamp, source: 'zentra-landing-page', formLocation }`. Override in Vercel via the `NEXT_PUBLIC_N8N_WEBHOOK_URL` env var. Not wired into the current design — reconnect it when a lead form is added back.
-
-## Brand (per [zentra_brand_guidelines.pdf](zentra_brand_guidelines.pdf))
-
-- **Colors** — Deep Navy `#040043`, Electric Blue `#0021F3`, Lavender Pearl `#C1BFE3`, Pure White, Soft Lavender `#F5F4FF`
-- **Approved text pairings** — White-on-Navy, White-on-Blue, Pearl-on-Navy, Navy-on-White (never Blue-on-Navy for text)
-- **Typography** — Sora 700 Display, Sora 600 H2/H3, Sora 400 body (1.7 leading), DM Mono 500 for stats/data
-- **Brand gradient** — `#0021F3 → #C1BFE3` — reserved for logo icon fill, hero `<em>`, waveform, scroll progress, avatars
-- **Voice** — direct, confident, specific numbers not superlatives, Ringgit not dollars
-
-## Deployment
-
-Vercel auto-detects Next.js. Push to the connected git branch, done. No `vercel.json` required.
+Run `npm run build`, `node --test tests/lead-handler.test.mjs`, and mobile/desktop browser checks. Verify native video playback, keyboard tabs, form errors/success and no horizontal overflow. Keep navy/blue/pearl contrast readable and support reduced motion. Release/push to an auto-deploy branch requires user authorization; local preview alone does not authorise release.
