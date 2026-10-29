@@ -1,0 +1,44 @@
+/* Rig + keyframes from Zentra Relay's components/assistant/assistant.css, scoped under .mascot. */
+.mascot{display:inline-block;flex:none;vertical-align:middle;line-height:0}
+.mascot svg{display:block;width:100%;height:100%;overflow:visible}
+
+.mascot .m-mochi .body{transform-origin:100px 172px}
+.mascot .char{transform-origin:100px 100px}
+.mascot .eye{transform-box:fill-box;transform-origin:center}
+.mascot .happy,.mascot .smile,.mascot .grin,.mascot .oh,
+.mascot .ring,.mascot .dot,.mascot .dots,.mascot .tick,.mascot .spark{opacity:0}
+
+/* Faces: open eyes unless happy; smile at rest, grin when happy, "o" when it needs you. */
+.mascot:is([data-state=clear],[data-state=hello]) .eye{opacity:0}
+.mascot:is([data-state=clear],[data-state=hello]) :is(.happy,.grin){opacity:1}
+.mascot:is([data-state=idle],[data-state=thinking]) .smile{opacity:1}
+.mascot[data-state=needs] .oh{opacity:1}
+.mascot .eye{animation:m-blink 5s infinite}
+
+/* One signal at a time: ring (big) or amber dot (small), thinking dots, tick, or sparkle. */
+.mascot[data-state=needs]:not(.mascot--sm) .ring{opacity:1;animation:m-pulse 1.6s ease-in-out infinite}
+.mascot--sm[data-state=needs] .dot{opacity:1}
+.mascot[data-state=thinking] .dots{opacity:1}
+.mascot[data-state=thinking] .dots circle{animation:m-dot 1.2s infinite}
+.mascot[data-state=thinking] .dots circle:nth-child(2){animation-delay:.2s}
+.mascot[data-state=thinking] .dots circle:nth-child(3){animation-delay:.4s}
+.mascot[data-state=clear] .tick{opacity:1}
+.mascot[data-state=hello] .spark{opacity:1}
+
+/* Mochi moves its whole body; Orb stays still and only looks around or nudges. */
+.mascot .m-mochi .body{animation:m-squish 2.8s ease-in-out infinite}
+.mascot:is([data-state=clear],[data-state=hello]) .m-mochi .body{animation:m-hop 1.3s ease-in-out infinite}
+.mascot .m-orb .face{animation:m-look 6s ease-in-out infinite}
+.mascot[data-state=hello] .m-orb .char{animation:m-nudge 1.6s ease-in-out infinite}
+
+@keyframes m-squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes m-hop{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-14px) scale(.97,1.03)}60%{transform:translateY(0) scale(1.05,.95)}}
+@keyframes m-nudge{0%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+@keyframes m-look{0%,40%,100%{transform:translateX(0)}50%,72%{transform:translateX(6px)}}
+@keyframes m-blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes m-pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes m-dot{0%,100%{opacity:.25}50%{opacity:1}}
+
+@media (prefers-reduced-motion:reduce){
+  .mascot *{animation:none!important}
+}

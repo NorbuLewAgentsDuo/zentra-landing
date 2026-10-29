@@ -14,7 +14,7 @@ export default function Page() {
         url: siteUrl,
         areaServed: 'Klang Valley, Malaysia',
         description:
-          'A managed enquiry-to-appointment system for businesses: capture, qualification, follow-up, booking and attendance reporting.',
+          'Zentra Relay replies to ad enquiries in seconds, follows up with people who go quiet and books them into the calendar, for businesses running Meta ads in Klang Valley.',
       },
       {
         '@type': 'FAQPage',

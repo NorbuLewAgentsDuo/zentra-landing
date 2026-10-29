@@ -1,5 +1,9 @@
 import './globals.css';
 import Script from 'next/script';
+import { Bricolage_Grotesque, Figtree } from 'next/font/google';
+
+const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['600', '800'], variable: '--font-display' });
+const body = Figtree({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-body' });
 
 // Analytics stays off unless a production deployment explicitly supplies an ID.
 const clarityId = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_CLARITY_ID : '';
@@ -7,9 +11,9 @@ const clarityId = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLI
 // Production URL drives canonical + Open Graph absolute image URLs.
 // Override in Vercel via NEXT_PUBLIC_SITE_URL. TODO: bake the real domain here.
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zentra-landing.vercel.app';
-const title = 'Zentra MY | Enquiry-to-Consultation Systems';
+const title = 'Zentra MY | Free Enquiry Audit for businesses running Meta ads';
 const description =
-  'Zentra helps businesses in Klang Valley qualify enquiries, follow up consistently, coordinate consultations and track attendance.';
+  'We mystery-shopped 18 Klang Valley businesses: 13 never followed up. Get a free Enquiry Audit, then let Zentra Relay reply, chase and book your ad enquiries.';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -33,14 +37,14 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#050406',
+  themeColor: '#F7F5FC',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>{children}</body>
       {clarityId ? (
         <Script id="ms-clarity" strategy="afterInteractive">

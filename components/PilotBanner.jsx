@@ -32,8 +32,8 @@ export default function PilotBanner({ deadline, label }) {
     <aside className="pilot-banner" aria-label="Pilot announcement">
       <a className="pilot-banner-inner" href="#apply">
         <div className="pilot-banner-copy">
-          <span className="banner-badge">FREE PILOT</span>
-          <span><strong>{configured ? (expired ? 'This pilot deadline has passed' : label) : 'Put your enquiry workflow to work.'}</strong>
+          <span className="banner-badge">FREE AUDIT</span>
+          <span><strong>{configured ? (expired ? 'This pilot deadline has passed' : label) : 'See what your customers see when they enquire.'}</strong>
             {configured ? <small>{`${dateLabel} MYT${expired ? ' · Ask about future availability' : ''}`}</small> : null}
           </span>
         </div>
@@ -42,7 +42,7 @@ export default function PilotBanner({ deadline, label }) {
             {units.map(([value, unit]) => <span key={unit}><b>{String(value).padStart(2, '0')}</b><small>{unit}</small></span>)}
           </div>
         ) : null}
-        <span className="banner-action">{expired ? 'Ask about availability' : 'See if you’re a fit'} <span aria-hidden="true">→</span></span>
+        <span className="banner-action">{expired ? 'Ask about availability' : 'Get my audit'} <span aria-hidden="true">→</span></span>
       </a>
     </aside>
   );

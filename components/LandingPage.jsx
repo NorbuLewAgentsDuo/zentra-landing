@@ -1,196 +1,319 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { faqs, testimonials } from '@/lib/siteContent';
-import PilotBanner from './PilotBanner';
+import AuditForm from './AuditForm';
 import JourneyInfographic from './JourneyInfographic';
+import { Mascot } from './Mascot';
+import PilotBanner from './PilotBanner';
 
-const EMPTY_FORM = {
-  name: '',
-  businessName: '',
-  website: '',
-  email: '',
-  enquirySituation: '',
-  contactConsent: false,
+// Mystery shop, Oct 2026: 18 Klang Valley businesses that run Meta ads, each messaged once as a customer.
+const ANSWER_DOTS = [...Array(5).fill('good'), ...Array(6).fill('slow'), ...Array(7).fill('bad')];
+const CHASE_DOTS = [...Array(5).fill('good'), ...Array(13).fill('bad')];
+
+const STORIES = [
+  { tone: 'bad', tag: 'Lost lead', who: 'An aesthetics clinic', text: 'replied to a Friday enquiry on Monday afternoon. By then most people have booked somewhere else.' },
+  { tone: 'bad', tag: 'Lost lead', who: 'A skin clinic', text: 'followed up 4 times but never gave a price, then sent a “closing your file” message.' },
+  { tone: 'good', tag: 'Best reply', who: 'A chiropractor', text: 'replied in 1 minute, sent prices in about 11 and followed up twice with new slots. That’s the standard Relay holds you to.' },
+];
+
+const RELAY_FEATURES = [
+  { title: 'Replies in seconds, 24/7', text: 'Your 11pm enquiry gets an answer at 11pm, on WhatsApp, in your tone. English or BM.' },
+  { title: 'Gives the price and a next step', text: '7 of 18 businesses had no price after 90 minutes. Relay answers with the price and two open slots.' },
+  { title: 'Chases the ones who go quiet', text: 'The step 13 of 18 skipped. Relay follows up until they book or say stop.' },
+  { title: 'Books into your calendar', text: 'Confirms the slot, sends the reminder and tells you who’s coming.' },
+  { title: 'Shows which ads bring bookings', text: 'Cost per booking for every Meta ad, with a keep, cut or scale call after 3 days.' },
+  { title: 'Sends bookings back to Meta', text: 'So your ads learn to find more people who actually book, not just people who click.' },
+];
+
+const OFFER_STACK = [
+  'Done-for-you setup on your WhatsApp. No new software to learn.',
+  'Relay replying, chasing and booking 24/7',
+  'Your replies written in your tone, in English or BM',
+  'A report of every enquiry, booking and show-up, by ad',
+  'The 3-day ad check on every Meta ad you run',
+];
+
+const FIT = {
+  yes: [
+    'You run Meta ads, or start this month',
+    'Enquiries land on WhatsApp, Facebook or Instagram',
+    'You could take more bookings than you get today',
+  ],
+  no: [
+    'You get no enquiries yet. Fix traffic first.',
+    'You want a chatbot to set up yourself',
+    'You want it to close the sale. Your team still does that.',
+  ],
 };
 
 function ArrowIcon() {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   );
 }
 
-function BrandWordmark() {
+function Check() {
   return (
-    <img className="brand-wordmark" src="/assets/zentra-wordmark.png" alt="Zentra" />
+    <svg viewBox="0 0 20 20" aria-hidden="true" className="check">
+      <path d="M4.5 10.5l3.5 3.5 7.5-8" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Brand() {
+  return (
+    <span className="brand-lockup">
+      <img src="/assets/zentralogo.png" alt="" width="32" height="32" />
+      Zentra
+    </span>
+  );
+}
+
+function Dots({ dots, label }) {
+  return (
+    <div className="dots" role="img" aria-label={label}>
+      {dots.map((tone, i) => <span key={i} className={`dot dot-${tone}`} />)}
+    </div>
+  );
+}
+
+/** Hero visual: a fictional WhatsApp thread showing a Relay reply, with Mochi and Orb beside it. */
+function ChatDemo() {
+  return (
+    <figure className="chat-demo">
+      <Mascot kind="orb" state="thinking" size={84} className="chat-orb" />
+      <Mascot kind="mochi" state="hello" size={104} className="chat-mochi" />
+      <div className="chat-phone">
+        <div className="chat-head">
+          <span className="chat-avatar">YC</span>
+          <span><strong>Your clinic</strong><small>replies in seconds</small></span>
+        </div>
+        <div className="chat-body">
+          <p className="msg msg-in">Hi, saw your ad. How much for the first consultation?<time>11:42 PM</time></p>
+          <p className="msg msg-out">Hi! First consultation is RM80 and takes about 30 min. Tomorrow I have 10am or 3pm open. Which suits you?<time>11:42 PM</time></p>
+          <p className="msg msg-in">3pm ok<time>11:44 PM</time></p>
+          <p className="msg msg-out">Booked for 3pm tomorrow. See you then!<time>11:44 PM</time></p>
+          <span className="chat-booked"><Check /> Booked · Tue 3:00 PM</span>
+        </div>
+      </div>
+      <figcaption>How Relay replies · example conversation</figcaption>
+    </figure>
+  );
+}
+
+// Mobile-only bottom bar, hidden while the hero or the form is on screen.
+function StickyCta() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const targets = ['top', 'apply'].map((id) => document.getElementById(id)).filter(Boolean);
+    const visible = new Set();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target);
+      setShow(visible.size === 0);
+    });
+    targets.forEach((t) => observer.observe(t));
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div className={`sticky-cta${show ? ' is-shown' : ''}`} aria-hidden={!show}>
+      <a className="button button-primary" href="#apply" tabIndex={show ? 0 : -1}>Get my free audit <ArrowIcon /></a>
+    </div>
   );
 }
 
 export default function LandingPage({ pilotDeadline, pilotDeadlineLabel }) {
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [status, setStatus] = useState('idle');
-  const [message, setMessage] = useState('');
-  const submittingRef = useRef(false);
-
-  const update = (field) => (event) => {
-    const value = field === 'contactConsent' ? event.target.checked : event.target.value;
-    setForm((current) => ({ ...current, [field]: value }));
-  };
-
-  async function submitApplication(event) {
-    event.preventDefault();
-    if (submittingRef.current) return;
-    if (!event.currentTarget.reportValidity()) return;
-    if (!form.contactConsent) {
-      setStatus('error');
-      setMessage('Please confirm that Zentra may contact you about this application.');
-      return;
-    }
-
-    submittingRef.current = true;
-    setStatus('submitting');
-    setMessage('');
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 20000);
-
-    try {
-      const response = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-        signal: controller.signal,
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.error || 'We could not send your application.');
-
-      setStatus('success');
-      setMessage(
-        'Received. We’ll review your enquiry process and contact you if the pilot looks like a useful fit.'
-      );
-      setForm(EMPTY_FORM);
-    } catch (error) {
-      setStatus('error');
-      setMessage(
-        error.name === 'AbortError'
-          ? 'The request took too long. Please try again.'
-          : error.message || 'Something went wrong. Please try again.'
-      );
-    } finally {
-      window.clearTimeout(timeout);
-      submittingRef.current = false;
-    }
-  }
-
   return (
     <div className="site-shell">
       <a className="skip-link" href="#main-content">Skip to content</a>
       <PilotBanner deadline={pilotDeadline} label={pilotDeadlineLabel} />
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="Zentra MY home">
-          <BrandWordmark />
-        </a>
-        <nav aria-label="Main navigation">
-          <a href="#system">The system</a>
-          <a href="#proof">Client experiences</a>
-          <a href="#pilot">The pilot</a>
-        </nav>
-        <a className="header-cta" href="#apply">
-          Discuss a free pilot
-        </a>
+        <div className="section-wrap header-inner">
+          <a className="brand" href="#top" aria-label="Zentra MY home"><Brand /></a>
+          <nav aria-label="Main navigation">
+            <a href="#scoreboard">The scoreboard</a>
+            <a href="#relay">Zentra Relay</a>
+            <a href="#offer">The offer</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+          <a className="header-cta" href="#apply">Free audit</a>
+        </div>
       </header>
 
-      <main id="top">
+      <main>
         <div id="main-content" tabIndex={-1} />
-        <section className="hero section-wrap">
-          <div className="hero-copy">
-            <p className="eyebrow"><span>For businesses turning enquiries into appointments</span> Klang Valley</p>
-            <h1>
-              You paid for the enquiry.{' '}
-              <em>Give it a clear path to a consultation.</em>
-            </h1>
-            <p className="hero-description">
-              When follow-up depends on memory, enquiries can stall. Zentra qualifies enquiries,
-              follows up and coordinates consultations—so your team can focus on the conversations that need them.
-            </p>
-            <div className="hero-actions">
-              <a className="button button-primary" href="#apply">
-                Discuss a free pilot <ArrowIcon />
-              </a>
-              <a className="button button-secondary" href="https://audit.zentramy.com/" target="_blank" rel="noreferrer">
-                Check your website
-              </a>
-            </div>
-            <p className="hero-note">Free pilot. Scope agreed together. Paid continuation discussed separately.</p>
-            <a className="text-link hero-tour" href="#system">Explore the enquiry journey <span aria-hidden="true">↓</span></a>
-          </div>
 
-          <div className="hero-system-art" aria-label="Fictional illustration of an enquiry moving through Zentra">
-            <div className="brand-object" aria-hidden="true">
-              <div className="brand-object-edge" />
-              <div className="brand-object-face">
-                <img src="/assets/zentralogo.png" alt="" />
+        {/* Hero */}
+        <section className="hero" id="top">
+          <div className="section-wrap hero-grid">
+            <div className="hero-copy">
+              <p className="pill">For Klang Valley businesses running Meta ads</p>
+              <h1>Stop paying for enquiries <em>nobody follows up.</em></h1>
+              <p className="lede">
+                I messaged 18 Klang Valley businesses as a customer from their own ads. 13 never followed up
+                when I went quiet. Zentra Relay replies in seconds, chases the ones who go quiet and books them
+                into your calendar.
+              </p>
+              <div className="hero-actions">
+                <a className="button button-primary" href="#apply">Get my free Enquiry Audit <ArrowIcon /></a>
+                <a className="button button-secondary" href="https://audit.zentramy.com/" target="_blank" rel="noreferrer">Free website check</a>
               </div>
+              <ul className="hero-proof">
+                <li><Check /> Free</li>
+                <li><Check /> Report within 48 hours</li>
+                <li><Check /> No call needed</li>
+              </ul>
             </div>
-            <div className="flow-card flow-card-enquiry">
-              <span>Prospect · fictional</span>
-              <strong>“Can we discuss your service?”</strong>
-              <small>Website enquiry · received</small>
+            <ChatDemo />
+          </div>
+        </section>
+
+        {/* Proof: the mystery shop */}
+        <section className="section section-card" id="scoreboard">
+          <div className="section-wrap">
+            <div className="section-heading">
+              <p className="eyebrow">The mystery shop · Oct 2026</p>
+              <h2>We enquired at 18 businesses like a real customer. Here’s the scoreboard.</h2>
             </div>
-            <div className="flow-rail" aria-hidden="true"><i /><i /><i /></div>
-            <div className="flow-card flow-card-system">
-              <span>Zentra system</span>
-              <strong>Follow-up + consultation options</strong>
-              <small>Runs the approved next action</small>
+            <div className="score-grid">
+              <article className="score-card">
+                <h3>Time to a real answer: a price or a slot</h3>
+                <Dots dots={ANSWER_DOTS} label="5 under 5 minutes, 6 in 10 to 50 minutes, 7 with no price after 90 minutes" />
+                <ul className="legend">
+                  <li><span className="dot dot-good" /><b>5</b> under 5 minutes</li>
+                  <li><span className="dot dot-slow" /><b>6</b> 10 to 50 minutes</li>
+                  <li><span className="dot dot-bad" /><b>7</b> no price after 90 minutes</li>
+                </ul>
+              </article>
+              <article className="score-card">
+                <h3>Followed up when the customer went quiet</h3>
+                <Dots dots={CHASE_DOTS} label="5 followed up, 13 never did" />
+                <ul className="legend">
+                  <li><span className="dot dot-good" /><b>5</b> followed up</li>
+                  <li><span className="dot dot-bad" /><b>13</b> never chased</li>
+                </ul>
+              </article>
             </div>
-            <div className="flow-card flow-card-human">
-              <span>Your team</span>
-              <strong>Answers a specialist question</strong>
-              <small>Confirms the attendance outcome</small>
-            </div>
-            <ol className="hero-stage-path" aria-label="Five stages in the fictional workflow">
-              {['Capture', 'Qualify', 'Follow up', 'Book', 'Attend'].map((stage, index) => (
-                <li key={stage}><span>{index + 1}</span>{stage}</li>
+            <ol className="story-grid">
+              {STORIES.map((story) => (
+                <li key={story.who} className={`story story-${story.tone}`}>
+                  <span className="story-tag">{story.tag}</span>
+                  <p><strong>{story.who}</strong> {story.text}</p>
+                </li>
               ))}
             </ol>
-            <p className="art-caption">Fictional workflow</p>
+            <p className="footnote">No names published. Each business got one enquiry, the same way a real ad enquiry comes in.</p>
           </div>
         </section>
 
-        <section className="belief-band" aria-label="Zentra belief">
+        {/* Why */}
+        <section className="belief-band" aria-label="Why Zentra exists">
           <div className="section-wrap belief-grid">
             <p className="eyebrow">Why Zentra exists</p>
-            <blockquote>A business shouldn&rsquo;t depend on someone remembering to do the work.</blockquote>
+            <blockquote>A business shouldn’t depend on someone remembering to do the work.</blockquote>
             <p>
-              We build the repeatable middle of the sales process into how the business actually
-              runs. Your people stay responsible for the moments that need expertise and trust.
+              We build the repeatable middle of the sales process into how your business already runs.
+              Your people stay on the moments that need expertise and trust.
             </p>
           </div>
         </section>
 
-        <section className="system-section section-wrap" id="system">
-          <div className="section-heading">
-            <p className="eyebrow">Your enquiry journey, connected</p>
-            <h2>Every enquiry. A clear next step.</h2>
-            <p>
-              See how an enquiry moves from first contact to an attended appointment. Explore each stage for an illustrative example, the work Zentra handles and where your team takes over.
-            </p>
-          </div>
-
-          <JourneyInfographic />
-
-        </section>
-
-        <section className="proof-section" id="proof">
+        {/* How */}
+        <section className="section" id="system">
           <div className="section-wrap">
-            <div className="section-heading proof-heading">
+            <div className="section-heading">
+              <p className="eyebrow">How it works</p>
+              <h2>Every enquiry gets the same five steps. Every time.</h2>
+              <p>Tap a stage to see an example, what Relay handles and where your team takes over.</p>
+            </div>
+            <JourneyInfographic />
+          </div>
+        </section>
+
+        {/* What: Zentra Relay */}
+        <section className="section section-stage" id="relay">
+          <div className="section-wrap">
+            <div className="section-heading">
+              <p className="eyebrow">Meet Zentra Relay</p>
+              <h2>The sales half of your ads, running on its own.</h2>
+              <p>Your ads bring the enquiry. Relay turns it into a booked appointment, then shows you which ads did it.</p>
+            </div>
+            <ol className="feature-grid">
+              {RELAY_FEATURES.map((feature, i) => (
+                <li key={feature.title} className="feature">
+                  <span className="feature-num">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.text}</p>
+                </li>
+              ))}
+            </ol>
+            <div className="mascot-note">
+              <span className="mascot-pair">
+                <Mascot kind="mochi" state="idle" size={60} />
+                <Mascot kind="orb" state="idle" size={60} />
+              </span>
+              <p><strong>Meet Mochi and Orb.</strong> They live in your Relay dashboard and tell you what needs you. Your customers only ever see your business name.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* The offer */}
+        <section className="section" id="offer">
+          <div className="section-wrap">
+            <div className="offer">
+              <div className="offer-main">
+                <p className="eyebrow eyebrow-light">The offer</p>
+                <h2>The 30-Day Booked Appointments Pilot</h2>
+                <p className="offer-sub">Here’s everything you get:</p>
+                <ul className="offer-stack">
+                  {OFFER_STACK.map((item) => <li key={item}><Check />{item}</li>)}
+                </ul>
+                <div className="guarantee">
+                  <strong>The walk-away guarantee</strong>
+                  <p>Free for 30 days. If Relay doesn’t book you appointments in that time, walk away and pay nothing.</p>
+                </div>
+              </div>
+              <div className="offer-side">
+                <p className="price-label">From day 31</p>
+                <p className="price">RM3,000<span>/month</span></p>
+                <p className="price-note">Compare that with the ad money you spend on enquiries nobody chases.</p>
+                <p className="scarcity">We set up 5 businesses at a time, so setup stays done-for-you.</p>
+                <a className="button button-primary" href="#apply">Start with the free audit <ArrowIcon /></a>
+                <Mascot kind="mochi" state="hello" size={130} className="offer-mochi" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Fit */}
+        <section className="section section-card" id="fit">
+          <div className="section-wrap">
+            <div className="section-heading">
+              <p className="eyebrow">Is this for you?</p>
+              <h2>Built for businesses already paying for enquiries.</h2>
+            </div>
+            <div className="fit-grid">
+              <div className="fit fit-yes">
+                <h3>It’s for you if</h3>
+                <ul>{FIT.yes.map((item) => <li key={item}><Check />{item}</li>)}</ul>
+              </div>
+              <div className="fit fit-no">
+                <h3>It’s not for you if</h3>
+                <ul>{FIT.no.map((item) => <li key={item}><span className="cross" aria-hidden="true">×</span>{item}</li>)}</ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Proof: past clients */}
+        <section className="section" id="proof">
+          <div className="section-wrap">
+            <div className="section-heading">
               <p className="eyebrow">Client experiences</p>
               <h2>What working with Zentra feels like.</h2>
-              <p>
-                Client experiences from previous Zentra engagements. These are not presented as
-                results or revenue claims for this pilot.
-              </p>
+              <p>From previous Zentra engagements. Not presented as results for this pilot.</p>
             </div>
             <div className="testimonial-grid">
               {testimonials.map((testimonial) => (
@@ -213,92 +336,79 @@ export default function LandingPage({ pilotDeadline, pilotDeadlineLabel }) {
           </div>
         </section>
 
-        <section className="pilot-section section-wrap" id="pilot">
-          <div className="section-heading pilot-heading">
-            <p className="eyebrow">The free pilot</p>
-            <h2>What we put to work in your free pilot.</h2>
+        {/* Founder */}
+        <section className="section section-card" id="founder">
+          <div className="section-wrap founder">
+            <p className="eyebrow">Who’s behind this</p>
+            <h2>Hi, I’m Norbu.</h2>
             <p>
-              We configure the same five-part system around an agreed enquiry source: capture,
-              qualification, follow-up, booking and attendance reporting. Together, we review
-              what works before discussing paid continuation.
+              I run Zentra MY out of Kuala Lumpur. Before building anything, I wanted to know what actually
+              happens to an ad enquiry. So I messaged 18 Klang Valley businesses myself, from their own ads,
+              as a normal customer.
             </p>
-          </div>
-          <div className="pilot-grid">
-            <article><span>01 / QUALIFY</span><h3>Know who is ready to talk</h3><p>Capture enquiries and collect the project details your team needs, using questions you approve.</p></article>
-            <article><span>02 / FOLLOW UP</span><h3>Keep the conversation moving</h3><p>Run agreed follow-ups, respect stop requests and route questions that need a person to your team.</p></article>
-            <article><span>03 / BOOK</span><h3>Make the next step clear</h3><p>Coordinate consultations around your availability and send agreed reminders before the meeting.</p></article>
-            <article><span>04 / REVIEW</span><h3>See what actually happened</h3><p>Review enquiries, bookings, recorded attendance and the moments that needed your team’s help.</p></article>
-          </div>
-          <div className="pilot-fit"><p><strong>A useful fit:</strong> Your business already receives enquiries from ads, your website or inbound messages, can share how they are handled, and has a team member to approve messages and handle escalations.</p><a className="button button-primary" href="#apply">Discuss a free pilot <ArrowIcon /></a></div>
-        </section>
-
-        <section className="faq-section section-wrap" id="faq">
-          <div className="section-heading faq-heading">
-            <p className="eyebrow">Before you apply</p>
-            <h2>The practical questions.</h2>
-          </div>
-          <div className="faq-list">
-            {faqs.map((faq) => (
-              <details key={faq.question}>
-                <summary>{faq.question}<span aria-hidden="true">+</span></summary>
-                <p>{faq.answer}</p>
-              </details>
-            ))}
+            <p>
+              The best one, a chiropractor, replied in a minute, sent prices in about 11 and followed up twice
+              with new slots. Most didn’t come close. Relay exists so every business runs like that
+              chiropractor, without anyone having to remember.
+            </p>
+            <p className="signoff">Norbu Lew, founder, Zentra MY</p>
           </div>
         </section>
 
-        <section className="apply-section" id="apply">
+        {/* FAQ */}
+        <section className="section" id="faq">
+          <div className="section-wrap faq-wrap">
+            <div className="section-heading">
+              <p className="eyebrow">Questions</p>
+              <h2>The practical stuff.</h2>
+            </div>
+            <div className="faq-list">
+              {faqs.map((faq) => (
+                <details key={faq.question}>
+                  <summary>{faq.question}<span aria-hidden="true">+</span></summary>
+                  <p>{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Form */}
+        <section className="section section-card apply" id="apply">
           <div className="section-wrap apply-grid">
             <div className="apply-copy">
-              <p className="eyebrow">Discuss a free pilot</p>
-              <h2>Let’s find where your enquiries get stuck.</h2>
+              <p className="eyebrow">Free Enquiry Audit</p>
+              <h2>See what your customers see.</h2>
               <p>
-                Tell us how your business handles enquiries today. We review every application manually
-                and contact you if there is a useful pilot to discuss.
+                We send one enquiry to your business the way a customer from your ad would, within 48 hours.
+                Then you get a short report:
               </p>
-              <div className="apply-promise">
-                <span>What happens next</span>
-                <ol className="next-steps">
-                  <li><strong>Tell us about your business</strong><span>Share how enquiries are handled today.</span></li>
-                  <li><strong>We review the fit</strong><span>A person reviews your process and where we could help.</span></li>
-                  <li><strong>Discuss a pilot together</strong><span>If there’s a fit, we agree scope and responsibilities before setup.</span></li>
-                </ol>
-              </div>
+              <ol className="audit-points">
+                <li>How fast you replied, and when</li>
+                <li>Whether you gave a price or a clear next step</li>
+                <li>Whether anyone followed up when we went quiet</li>
+                <li>Roughly how many ad enquiries a month end that way</li>
+              </ol>
+              <p className="ps">
+                <strong>P.S.</strong> Even if you never use Relay, the audit shows you exactly what your
+                customers see. That’s worth 2 minutes.
+              </p>
+              <Mascot kind="orb" state="hello" size={88} className="apply-orb" />
             </div>
-
-            <form className="application-form" onSubmit={submitApplication} noValidate aria-busy={status === 'submitting'}>
-              <div className="form-heading"><p className="eyebrow">Start a conversation</p><h3>About your business</h3><p>No preparation needed. Just tell us what happens today.</p></div>
-              <div className="form-row">
-                <label>Full name<input type="text" name="name" value={form.name} onChange={update('name')} autoComplete="name" required maxLength={120} /></label>
-                <label>Business name<input type="text" name="businessName" value={form.businessName} onChange={update('businessName')} autoComplete="organization" required maxLength={200} /></label>
-              </div>
-              <label>Work email<input type="email" name="email" value={form.email} onChange={update('email')} autoComplete="email" required maxLength={254} /></label>
-              <label>Website <span>Optional — a full Instagram URL also works</span><input type="url" name="website" value={form.website} onChange={update('website')} placeholder="https://yourbusiness.com" maxLength={500} /></label>
-              <label>What currently happens after a new enquiry arrives?
-                <textarea name="enquirySituation" value={form.enquirySituation} onChange={update('enquirySituation')} required maxLength={2000} rows={5} placeholder="Tell us who responds, how follow-up works and where enquiries tend to stall." />
-              </label>
-              <label className="consent-row">
-                <input type="checkbox" name="contactConsent" checked={form.contactConsent} onChange={update('contactConsent')} required />
-                <span>I give Zentra permission to contact me about this application.</span>
-              </label>
-              <button className="button button-primary submit-button" type="submit" disabled={status === 'submitting'}>
-                {status === 'submitting' ? 'Sending application…' : 'Discuss my free pilot'}
-                {status !== 'submitting' ? <ArrowIcon /> : null}
-              </button>
-              {message ? <p className={`form-message ${status}`} role="status" aria-live="polite">{message}</p> : null}
-              <p className="form-fineprint">Your details are sent through Zentra&rsquo;s configured lead systems so we can review and respond. Submitting does not confirm acceptance or book an appointment.</p>
-            </form>
+            <AuditForm />
           </div>
         </section>
       </main>
 
-      <footer>
+      <footer className="site-footer">
         <div className="section-wrap footer-grid">
-          <a className="brand" href="#top" aria-label="Zentra MY home"><BrandWordmark /></a>
-          <p>AI systems for business, built around work that needs to get done.</p>
-          <span>© {new Date().getFullYear()} Zentra MY</span>
+          <a className="brand" href="#top" aria-label="Zentra MY home"><Brand /></a>
+          <p>A business shouldn’t depend on someone remembering to do the work.</p>
+          <span>© {new Date().getFullYear()} Zentra MY · Kuala Lumpur</span>
         </div>
       </footer>
+
+      <StickyCta />
     </div>
   );
 }

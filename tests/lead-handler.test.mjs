@@ -1,21 +1,30 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createLeadHandler } from '../lib/lead-handler.mjs';
-const fields = { name: 'Test Owner', businessName: 'Example Firm', email: 'owner@example.com', website: 'example.com', enquirySituation: 'We follow up manually.', contactConsent: true };
+const fields = { name: 'Test Owner', businessName: 'Example Clinic', businessType: 'Clinic', whatsapp: '012-345 6789', adSpend: 'RM1k–3k', enquiryChannel: 'instagram.com/exampleclinic', utm_source: 'fb', contactConsent: true };
 const request = (body = fields) => new Request('http://localhost/api/lead', { method: 'POST', body: JSON.stringify(body) });
 test('valid application is normalized and cannot spoof provenance', async () => {
   const calls = [];
   const handler = createLeadHandler({ webhookUrl: 'https://mock.invalid', fetchImpl: async (url, options) => { calls.push(JSON.parse(options.body)); return { ok: true }; } });
   assert.equal((await handler(request({ ...fields, source: 'spoof', timestamp: 'yesterday', extra: 'discard' }))).status, 200);
   assert.equal(calls[0].source, 'zentra-landing-page');
-  assert.equal(calls[0].website, 'https://example.com/');
+  assert.equal(calls[0].whatsapp, '60123456789');
+  assert.equal(calls[0].formLocation, 'free-enquiry-audit');
+  assert.equal(calls[0].utm_source, 'fb');
+  assert.match(calls[0].enquirySituation, /Clinic · ad spend RM1k–3k/);
   assert.ok(!Number.isNaN(Date.parse(calls[0].timestamp)));
   assert.equal(calls[0].extra, undefined);
 });
 test('invalid inputs and missing consent never reach downstream', async () => {
   const handler = createLeadHandler({ webhookUrl: 'https://mock.invalid', fetchImpl: () => { throw new Error('must not call'); } });
-  for (const body of [null, [], { ...fields, email: 'bad' }, { ...fields, contactConsent: false }, { ...fields, name: {} }, { ...fields, enquirySituation: 'x'.repeat(2001) }, { ...fields, website: 'javascript:alert(1)' }]) assert.equal((await handler(request(body))).status, 400);
+  for (const body of [null, [], { ...fields, email: 'bad' }, { ...fields, contactConsent: false }, { ...fields, name: {} }, { ...fields, name: ' ' }, { ...fields, whatsapp: '12-34' }, { ...fields, businessType: 'Casino' }, { ...fields, adSpend: 'lots' }, { ...fields, enquiryChannel: 'x'.repeat(301) }]) {
+    assert.equal((await handler(request(body))).status, 400);
+  }
   assert.equal((await handler(new Request('http://localhost', { method: 'POST', body: '{' }))).status, 400);
+});
+test('filled honeypot looks accepted but never reaches downstream', async () => {
+  const handler = createLeadHandler({ webhookUrl: 'https://mock.invalid', fetchImpl: () => { throw new Error('must not call'); } });
+  assert.equal((await handler(request({ ...fields, company_website: 'spam.biz' }))).status, 200);
 });
 test('unconfigured local preview does not forward', async () => {
   assert.equal((await createLeadHandler({})(request())).status, 503);
